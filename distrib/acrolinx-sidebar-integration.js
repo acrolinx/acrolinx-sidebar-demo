@@ -22110,11 +22110,16 @@ function createScriptElement(src) {
     el.defer = false;
     return el;
 }
+function createCompleteSidebarUrl(sidebarBaseUrl) {
+    var timestamp = Date.now();
+    return sidebarBaseUrl + 'index.html?t=' + timestamp;
+}
 function loadSidebarCode(sidebarUrl) {
     if (sidebarUrl === void 0) { sidebarUrl = exports.SIDEBAR_URL; }
     var sidebarBaseUrl = sidebarUrl;
     var getAbsoluteAttributeValue = function (s) { return s.replace(/^.*"(.*)".*$/g, sidebarBaseUrl + '$1'); };
-    utils.fetch(sidebarBaseUrl + 'index.html', function (sidebarHtml) {
+    var completeSidebarUrl = createCompleteSidebarUrl(sidebarBaseUrl);
+    utils.fetch(completeSidebarUrl, function (sidebarHtml) {
         if (sidebarHtml.indexOf("<meta name=\"sidebar-version\"") < 0) {
             try {
                 throw new SidebarURLInvalidError("It looks like the sidebar URL was configured wrongly.", sidebarBaseUrl, sidebarHtml);
@@ -22139,7 +22144,7 @@ function loadSidebarCode(sidebarUrl) {
 exports.loadSidebarCode = loadSidebarCode;
 function loadSidebarIntoIFrame(config, sidebarIFrameElement, onSidebarLoaded) {
     var sidebarBaseUrl = config.sidebarUrl || exports.SIDEBAR_URL;
-    var completeSidebarUrl = sidebarBaseUrl + 'index.html';
+    var completeSidebarUrl = createCompleteSidebarUrl(sidebarBaseUrl);
     if (config.useMessageAdapter || (config.useSidebarFromSameOriginDirectly && utils.isFromSameOrigin(sidebarBaseUrl))) {
         sidebarIFrameElement.addEventListener('load', onSidebarLoaded);
         sidebarIFrameElement.src = completeSidebarUrl;
