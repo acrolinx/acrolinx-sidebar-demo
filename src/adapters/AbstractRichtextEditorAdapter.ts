@@ -18,7 +18,7 @@
  *
  */
 
-import {Match, MatchWithReplacement, CheckResult, Check, DocumentSelection} from "../acrolinx-libs/plugin-interfaces";
+import {Match, MatchWithReplacement, CheckResult, Check, DocumentSelection, CheckInformationKeyValuePair} from "../acrolinx-libs/plugin-interfaces";
 import * as _ from "lodash";
 import {TextDomMapping, extractTextDomMapping, getEndDomPos} from "../utils/text-dom-mapping";
 import {AlignedMatch} from "../utils/alignment";
@@ -29,7 +29,7 @@ import {
   AdapterInterface, AdapterConf, ContentExtractionResult, AutobindWrapperAttributes,
   ExtractContentForCheckOpts
 } from "./AdapterInterface";
-import {getAutobindWrapperAttributes} from "../utils/adapter-utils";
+import {getAutobindWrapperAttributes, getEmbedCheckDataAsEmbeddableString} from "../utils/adapter-utils";
 
 
 type TextMapping = TextDomMapping;
@@ -40,6 +40,8 @@ export abstract class AbstractRichtextEditorAdapter implements AdapterInterface 
   currentHtmlChecking: string;
   isCheckingNow: boolean;
   prevCheckedHtml: string;
+  inputFormat?: string;
+  checkInformation?: CheckInformationKeyValuePair[];
 
   constructor(conf: AdapterConf) {
     this.config = conf;
@@ -60,6 +62,8 @@ export abstract class AbstractRichtextEditorAdapter implements AdapterInterface 
     this.isCheckingNow = false;
     this.currentHtmlChecking = this.html;
     this.prevCheckedHtml = this.currentHtmlChecking;
+    this.checkInformation = _checkResult.embedCheckInformation;
+    this.inputFormat = _checkResult.inputFormat;
   }
 
   extractContentForCheck(opts: ExtractContentForCheckOpts): ContentExtractionResult {
@@ -197,4 +201,10 @@ export abstract class AbstractRichtextEditorAdapter implements AdapterInterface 
     return getAutobindWrapperAttributes(this.getEditorElement());
   }
 
+  getEmbedCheckDataAsEmbeddableString(): string {
+    if(this.checkInformation && this.inputFormat) {
+      return getEmbedCheckDataAsEmbeddableString(this.checkInformation, this.inputFormat);
+    }
+    return "";
+  }
 }
