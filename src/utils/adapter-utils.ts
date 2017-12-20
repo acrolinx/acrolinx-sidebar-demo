@@ -40,7 +40,7 @@ export function getEmbedCheckDataAsEmbeddableString(checkInformation: CheckInfor
       embeddableString = embeddableString.concat("<!-- " + ACROLINX_PROCESSING_INSTRUCTION_TAG_NAME + " ");
       checkInformation.forEach(element => {
         embeddableString = embeddableString.concat(element.key).concat("=").concat("\"").concat(element.value).concat("\" ");
-        embeddableString = embeddableString.concat("?>");
+        embeddableString = embeddableString.concat("-->");
         return embeddableString;
       });
     }
