@@ -48,7 +48,6 @@ export interface AdapterInterface {
   selectRanges(checkId: string, matches: Match[]): void;
   replaceRanges(checkId: string, matchesWithReplacement: MatchWithReplacement[]): void;
   getAutobindWrapperAttributes?(): AutobindWrapperAttributes;
-  getEmbedCheckDataAsEmbeddableString?(): string;
 }
 
 export function hasError(a: ContentExtractionResult): a is HasError {

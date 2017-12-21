@@ -18,19 +18,16 @@
  *
  */
 
-import {Check, CheckResult, Match, MatchWithReplacement, CheckInformationKeyValuePair} from "../acrolinx-libs/plugin-interfaces";
+import {Check, CheckResult, Match, MatchWithReplacement} from "../acrolinx-libs/plugin-interfaces";
 import {
   AdapterInterface, CommonAdapterConf, ContentExtractionResult,
   ExtractContentForCheckOpts
 } from "./AdapterInterface";
 import {MultiEditorAdapter, MultiEditorAdapterConfig} from "./MultiEditorAdapter";
 import {bindAdaptersForCurrentPage} from "../autobind/autobind";
-import { getEmbedCheckDataAsEmbeddableString } from "../utils/adapter-utils";
 
 export class AutoBindAdapter implements AdapterInterface {
   private multiAdapter: MultiEditorAdapter;
-  inputFormat?: string;
-  checkInformation?: CheckInformationKeyValuePair[];
 
   constructor(private conf: (MultiEditorAdapterConfig & CommonAdapterConf)) {
     this.initMultiAdapter();
@@ -57,8 +54,6 @@ export class AutoBindAdapter implements AdapterInterface {
   }
 
   registerCheckResult(_checkResult: CheckResult) {
-    this.checkInformation = _checkResult.embedCheckInformation;
-    this.inputFormat = _checkResult.inputFormat;
   }
 
   selectRanges(checkId: string, matches: Match[]) {
@@ -69,10 +64,4 @@ export class AutoBindAdapter implements AdapterInterface {
     this.multiAdapter.replaceRanges(checkId, matchesWithReplacement);
   }
 
-  getEmbedCheckDataAsEmbeddableString(): string {
-    if(this.checkInformation && this.inputFormat) {
-      return getEmbedCheckDataAsEmbeddableString(this.checkInformation, this.inputFormat);
-    }
-    return "";
-  }
 }
