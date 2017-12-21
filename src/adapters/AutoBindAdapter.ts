@@ -63,5 +63,4 @@ export class AutoBindAdapter implements AdapterInterface {
   replaceRanges(checkId: string, matchesWithReplacement: MatchWithReplacement[]) {
     this.multiAdapter.replaceRanges(checkId, matchesWithReplacement);
   }
-
 }
