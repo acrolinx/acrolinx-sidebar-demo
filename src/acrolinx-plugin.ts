@@ -160,7 +160,7 @@ function initAcrolinxSamplePlugin(config: AcrolinxPluginConfig, editorAdapter: A
 
       onCheckResult(checkResult: CheckResult) {
         if (checkResult.embedCheckInformation && config.onEmbedCheckData) {
-          config.onEmbedCheckData(checkResult.embedCheckInformation, checkResult.inputFormat||"");
+          config.onEmbedCheckData(checkResult.embedCheckInformation, checkResult.inputFormat || "");
         }
         return adapter.registerCheckResult(checkResult);
       },
