@@ -42,12 +42,15 @@ function isProbablySearchField(el: HTMLElement) {
   return _.includes(PROBABLE_SEARCH_FIELD_NAMES, el.getAttribute('name')) && isAutoCompleteOff(el);
 }
 
-function getEditableElements(doc: Document = document): HTMLElement[] {
-  const visibleElements: HTMLElement[] = _.filter((doc.querySelectorAll(EDITABLE_ELEMENTS_SELECTOR) as any) as List<HTMLElement>, isDisplayed) as HTMLElement[];
+function getEditableElements(doc: Document[] = [document]): HTMLElement[] {
+  let visibleElements: HTMLElement[] = [];
+  doc.forEach(element => {
+    visibleElements.push(..._.filter((element.querySelectorAll(EDITABLE_ELEMENTS_SELECTOR) as any) as List<HTMLElement>, isDisplayed) as HTMLElement[]);
+  });
   return _(visibleElements).flatMap((el: HTMLElement) => {
     if (isIFrame(el)) {
       try {
-        return el.contentDocument ? getEditableElements(el.contentDocument) : [];
+        return el.contentDocument ? getEditableElements([el.contentDocument]) : [];
       } catch (err) {
         // Caused by same origin policy problems.
         return [];
