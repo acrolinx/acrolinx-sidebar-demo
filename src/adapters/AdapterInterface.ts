@@ -2,6 +2,7 @@ import {Match, MatchWithReplacement, Check, CheckResult, DocumentSelection} from
 
 export interface CommonAdapterConf {
   scrollOffsetY?: number;
+  documentPart?: Document[];
 }
 
 export interface HasEditorID extends CommonAdapterConf {
