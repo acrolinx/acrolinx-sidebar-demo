@@ -59,7 +59,7 @@ Before you start developing your own integration, you might benefit from looking
        npm start
    ```
    
-   Now open [http://localhost:3000](http://localhost:3000) in your web-browser. Choose the sample, that you want to see.
+   Now open [http://localhost:3000/samples](http://localhost:3000/samples) in your web-browser. Choose the sample, that you want to see.
    You will see sidebars login page. If not already pre-filled type 'http://integration.acrolinx.com:8031' as the server 
    address and choose a username and a password to login. 
    
