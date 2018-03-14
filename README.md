@@ -43,25 +43,11 @@ Before you start developing your own integration, you might benefit from looking
 
 ## Setting up the Sidebar Example
 
-### using nodejs and grunt-cli
+### Run the examples in a locally in a web browser
 
-1. Make sure that git is in your PATH variable. You can verify that running 
+1. Make sure, that you have installed nodejs (which includes npm).
 
-    ```
-    git
-    ```
-
-    in your console. If the command wasn't found, git is not in in your system's PATH variable.
-
-2. After check out, make sure, that you have installed nodejs (which includes npm).
-
-3. Install grunt-cli with
-
-    ```
-    npm install -g grunt-cli
-    ```
-
-4. In your console navigate into the projects root folder and install all required node modules with:
+2. In your console navigate into the projects root folder and install all required node modules with:
 
     ```
         npm install
@@ -70,12 +56,10 @@ Before you start developing your own integration, you might benefit from looking
 5. Now you can start the development server by typing:
   
    ```
-       grunt
+       npm start
    ```
    
-   (If grunt complains while the bower:install task, you might have to execute "bower install" manually.)
-   
-   Now open [http://localhost:9002](http://localhost:9002) in your web-browser. Choose the sample, that you want to see.
+   Now open [http://localhost:3000](http://localhost:3000) in your web-browser. Choose the sample, that you want to see.
    You will see sidebars login page. If not already pre-filled type 'http://integration.acrolinx.com:8031' as the server 
    address and choose a username and a password to login. 
    

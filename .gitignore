@@ -1,15 +1,9 @@
 # WebStorm settings
 .idea
 
-bower_components
 node_modules
-
 npm-debug.log
 
-.tscache
-
-tmp
 .private
 
 distrib/acrolinx-sidebar-integration.js.map
-**/.baseDir.ts
