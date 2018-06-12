@@ -18,10 +18,6 @@ See: [Getting Started with Custom Integrations](https://support.acrolinx.com/hc/
 
 [Setting up the Sidebar Example](#setting-up-the-sidebar-example)
 
-[Getting started with your own integration](#getting-started-with-your-own-integration )
-
-[Sidebar API Documentation](#sidebar-api-documentation)
-
 [License](#license)
 
 ## The Acrolinx Sidebar
@@ -44,7 +40,7 @@ Before you start developing your own integration, you might benefit from looking
 
 ## Setting up the Sidebar Example
 
-### Run the examples in a locally in a web browser
+### Run the examples locally in a web browser
 
 1. Make sure, that you have installed nodejs (which includes npm).
 
@@ -64,76 +60,13 @@ Before you start developing your own integration, you might benefit from looking
    You will see sidebars login page. If not already pre-filled type 'http://integration.acrolinx.com:8031' as the server 
    address and choose a username and a password to login. 
    
-   ![Screen Shot of Example](/doc/screenshot.png)
+   ![Screen Shot of Example](doc/screenshot.png)
    
 Within the sample client you can see how the sidebar interacts with different editors.
 There are adapters for simple editable divs, input elements and rich text editors like CKEditor and TinyMCE ready to go.
 You're integration can use these adapters and you'll won't have any headache about that.
 
 [back to top](#table-of-content)
-
-## Getting started with your own integration 
-
-The requirements to achieve this are:
-* a mechanism and a container that can display the Acrolinx sidebar (usually JavaScript plugin mechanism)
-* a mechanism that allows the sidebar to retrieve the text to be checked
-* a mechanism that will allow the sidebar to replace specific parts of the text
-
-All of the above are required by the Acrolinx Sidebar API and need to be provided by your integration. 
-However Acrolinx provides some reference integrations with TinyMCE and CKEditor.
-
-Let's take a look at how the sidebar is loaded and the typical interactions with an integration.
-
-### Loading
-
-1. Load your host editor and your integration code.
- 
-2. Register your integration as an Acrolinx Plugin (Check the API Documentation for the Acrolinx Plugin Interface.) 
- You'll find the API Documentation [here](https://cdn.rawgit.com/acrolinx/acrolinx-sidebar-demo/v0.3.52/doc/pluginDoc/modules/_src_acrolinx_libs_plugin_interfaces_.html).
- ```
- var acrolinxPlugin = {...}
- ```
-3. Load the sidebar and the referenced libraries code (usually sidebar.js, libs.js, sidebar.css).
-
-### Initializing
-
-1. Once the sidebar has finished loading it will request the integration 
-to initialize by calling `requestInit`.
- 
-2. The AcrolinxPlugin now must call `init`.
- 
-3. Once the init process has finished, the plug-in will be notified `onInitFinished`.
- 
-4. After initializing the sidebar will call `configure` and push the latest
- configuration to the plug-in.
- 
- ![Initializing plug-in and sidebar](/doc/initSidebarPlugin.png)
- 
-You'll find the API Documentation [here](https://cdn.rawgit.com/acrolinx/acrolinx-sidebar-demo/v0.3.52/doc/pluginDoc/modules/_src_acrolinx_libs_plugin_interfaces_.html).
-
-### Checking
-
-1. If the user pushes the button "Check" (in the Acrolinx sidebar), `requestGlobalCheck` is called.
- 
-2. The acrolinxPlugin must call `checkGlobal` to perform a check.
-
-3. When the check finished, `onCheckResult` is called and the sidebar displays cards for the issues.
-
-![Checking with plug-in and sidebar](/doc/checking.png)
- 
-### Other actions
-
-- When the user clicks on a card the sidebar will invoke `selectRanges` on the plugin.
-- When the user clicks on a replacement the sidebar will call `replaceRanges`.
-
-These are the most important interactions between the Acrolinx sidebar and your integration. 
-Please check the [sidebar plugin API](https://cdn.rawgit.com/acrolinx/acrolinx-sidebar-demo/v0.3.52/doc/pluginDoc/modules/_src_acrolinx_libs_plugin_interfaces_.html) for more information.
-
-[back to top](#table-of-content)
-
-## Sidebar API Documentation
-
-Check our [sidebar plugin API](https://cdn.rawgit.com/acrolinx/acrolinx-sidebar-demo/v0.3.52/doc/pluginDoc/modules/_src_acrolinx_libs_plugin_interfaces_.html).
 
 ## License
 
