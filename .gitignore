@@ -5,6 +5,3 @@ node_modules
 npm-debug.log
 
 .private
-
-distrib/acrolinx-sidebar-integration.js.map
-/package-lock.json
