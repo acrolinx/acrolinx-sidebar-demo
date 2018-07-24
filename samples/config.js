@@ -42,6 +42,15 @@ var basicConf = {
     return window.location.href;
   },
 
+  /**
+   * This optional function will be called after a successful check,
+   * if Embed Check Data is enabled on the Acrolinx core server.
+   * It’s the task of the integration to save the data in a suitable place.
+   */
+  // onEmbedCheckData: function (checkData, format) {
+  //   console.log('Embed Check Data', checkData, format);
+  // },
+
   //uiMode: 'noOptions',
   //clientLocale: 'en'
   //helpUrl: 'https://www.acrolinx.com',
