@@ -14,11 +14,9 @@
 <div id="app" style="width: 800px">
   <h1>Acrolinx Sidebar - Check Selection Example</h1>
   <p>
-    <a href="single-editor.html">Single-Editor Example</a> | <a href="markdown-editor.html">Markdown-Editor Example</a>
-    |
-    <a
-      href="https://support.acrolinx.com/hc/en-us/articles/205687652-Acrolinx-Sidebar-API-Reference" target="_blank">Open
-      Acrolinx Sidebar API Documentation</a>
+    <a href="index.html">Other Examples</a> | <a
+    href="https://support.acrolinx.com/hc/en-us/articles/205687652-Acrolinx-Sidebar-API-Reference" target="_blank">Getting
+    Started with Custom Integrations</a>
   </p>
 
   <p>Styled Text (Editable div)</p>
@@ -34,7 +32,7 @@
   'use strict';
 
   basicConf.checkSelection = true;
-  basicConf.sidebarUrl= 'https://acrolinx-sidebar-classic.s3.amazonaws.com/v14/dev/';
+  basicConf.sidebarUrl = 'https://acrolinx-sidebar-classic.s3.amazonaws.com/v14/dev/';
 
   function initAcrolinxPlugin() {
     var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
