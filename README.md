@@ -72,7 +72,8 @@ The SDK provides [adapters](https://github.com/acrolinx/sidebar-sdk-js/tree/mast
 * TinyMCE, and a
 * `MultiEditorAdapter` that can be used to combine different adapters as one document.
 
-If you need to support other editors, sometimes the `ContentEditableAdapter` works without any changes. If not, implement the [`AdapterInterface`](https://github.com/acrolinx/sidebar-sdk-js/blob/master/src/adapters/AdapterInterface.ts).
+If you need to support other editors, sometimes the `ContentEditableAdapter` works without any changes.
+If not, implement the [`AdapterInterface`](https://github.com/acrolinx/sidebar-sdk-js/blob/master/src/adapters/AdapterInterface.ts).
 
 ## References
 
