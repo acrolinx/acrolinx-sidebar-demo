@@ -1,82 +1,93 @@
 # Acrolinx Sidebar Demo
 
-Showcase for an integration of the [Acrolinx](http://www.acrolinx.com/) sidebar into a web application, using the npm package
-[acrolinx-sidebar-sdk](https://github.com/acrolinx/sidebar-sdk-js).
-The library contains adapters to use in your web integration. These are ready to use for: Editable divs, input elements and rich text editors like CKEditor and TinyMCE.
+This is a showcase for an integration of the [Acrolinx](http://www.acrolinx.com/) Sidebar into a web application.
 
 See: [Getting Started with Custom Integrations](https://support.acrolinx.com/hc/en-us/articles/205687652-Getting-Started-with-Custom-Integrations)
 
 ## Live Demo
 
-[Acrolinx Sidebar Live Demo](https://acrolinx.github.io/acrolinx-sidebar-demo/samples/index.html)
-
-## Table of Content
-
-[The Acrolinx Sidebar](#the-acrolinx-sidebar)
-
-[Prerequisites](#prerequisites)
-
-[Setting up the Sidebar Example](#setting-up-the-sidebar-example)
-
-[License](#license)
+[Acrolinx Sidebar Web Live Demo](https://acrolinx.github.io/acrolinx-sidebar-demo/samples/index.html)
 
 ## The Acrolinx Sidebar
 
-The Acrolinx sidebar is designed to show up beside the window where you edit your content. 
-You use it for checking, reviewing, and correcting your content. 
-To get an impression what the sidebar looks like in other integration check the 
-[Acrolinx Support Center](https://support.acrolinx.com/hc/en-us/articles/205594781-Acrolinx-Sidebar-Edition-User-Interface-Reference).
+The Acrolinx Sidebar is designed to show up beside the window where you edit your content.
+You use it for checking, reviewing, and correcting your content.
+To get an impression what the Sidebar looks like in existing integrations, have a look at
+[Get Started With the Sidebar](https://support.acrolinx.com/hc/en-us/articles/205697451-Get-Started-With-the-Sidebar).
 
 ## Prerequisites
 
-Please contact Acrolinx SDK support (sdk-support@acrolinx.com) for consulting and getting your integration certified.
-This sample works with a test license on an internal acrolinx server. This license is only meant for demonstration and developing purposes.
-Once you finished your integration you'll have to get a license for your integration from Acrolinx.
+Please contact [Acrolinx SDK support](https://github.com/acrolinx/acrolinx-coding-guidance/blob/master/topics/sdk-support.md)
+for consulting and getting your integration certified.
+This sample works with a test license on an internal Acrolinx URL.
+This license is only meant for demonstration and developing purposes.
+Once you finished your integration, you'll have to get a license for your integration from Acrolinx.
   
-Please note that this an example for a integration into a web application only. 
-Acrolinx offers different other SDKs for developing integrations. 
+Acrolinx offers different other SDKs, and examples for developing integrations.
 
-Before you start developing your own integration, you might benefit from looking into the sidebar example.
+Before you start developing your own integration, you might benefit from looking into:
 
-## Setting up the Sidebar Example
+* [Getting Started with Custom Integrations](https://support.acrolinx.com/hc/en-us/articles/205687652-Getting-Started-with-Custom-Integrations),
+* the [Guidance for the Development of Acrolinx Integrations](https://github.com/acrolinx/acrolinx-coding-guidance),
+* the [Acrolinx SDKs](https://github.com/acrolinx?q=sdk), and
+* the [Acrolinx Demo Projects](https://github.com/acrolinx?q=demo).
 
-### Run the examples locally in a web browser
+## Getting Started
 
-1. Make sure, that you have installed nodejs (which includes npm).
+### Run Locally in a Web Browser
 
+1. Make sure, that you have installed nodejs that includes npm.
 2. In your console navigate into the projects root folder and install all required node modules with:
 
-    ```
-        npm install
-    ```
-
-5. Now you can start the development server by typing:
-  
+   ```bash
+   npm install
    ```
-       npm start
-   ```
-   
-   Now open [http://localhost:3000/samples](http://localhost:3000/samples) in your web-browser. Choose the sample, that you want to see.
-   You will see sidebars login page. If not already pre-filled type 'http://integration.acrolinx.com:8031' as the server 
-   address and choose a username and a password to login. 
-   
-   ![Screen Shot of Example](doc/screenshot.png)
-   
-Within the sample client you can see how the sidebar interacts with different editors.
-There are adapters for simple editable divs, input elements and rich text editors like CKEditor and TinyMCE ready to go.
-You're integration can use these adapters and you'll won't have any headache about that.
 
-[back to top](#table-of-content)
+3. Now you can start the development server by typing:
+
+   ```bash
+   npm start
+   ```
+
+4. Now open [http://localhost:3000/samples](http://localhost:3000/samples) in your web-browser.
+5. Choose the sample, that you want to see. Use `https://test-ssl.acrolinx.com` as the Acrolinx URL.
+
+   ![Screenshot of Example](doc/screenshot.png)
+
+   The best entry point might be the Multi-Editor Example.
+
+### Configuration
+
+See: [config.js](blob/master/samples/config.js)
+
+## SDK Features
+
+The SDK provides [adapters](https://github.com/acrolinx/sidebar-sdk-js/tree/master/src/adapters) for:
+
+* `contentEditable` `div`-elements,
+* `input` text elements,
+* CodeMirror,
+* CKEditor,
+* Xeditor,
+* TinyMCE, and a
+* `MultiEditorAdapter` that can be used to combine different adapters as one document.
+
+If you need to support other editors, sometimes the `ContentEditableAdapter` works without any changes. If not, implement the [`AdapterInterface`](https://github.com/acrolinx/sidebar-sdk-js/blob/master/src/adapters/AdapterInterface.ts).
+
+## References
+
+* This DEMO is built on the [Sidebar SDK JS](https://github.com/acrolinx/sidebar-sdk-js).
+* The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-sdk-js/pluginDoc/modules/_acrolinx_libs_plugin_interfaces_.html).
 
 ## License
 
-Copyright 2015-2016 Acrolinx GmbH
+Copyright 2015-present Acrolinx GmbH
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+You may obtain a copy of the License at:
 
-http://www.apache.org/licenses/LICENSE-2.0
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -84,8 +95,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-For more information visit: http://www.acrolinx.com
-
-[back to top](#table-of-content)
-
-
+For more information visit: [http://www.acrolinx.com](http://www.acrolinx.com)
