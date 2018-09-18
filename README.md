@@ -1,6 +1,6 @@
 # Acrolinx Sidebar Demo
 
-This is a showcase for an integration of the [Acrolinx](http://www.acrolinx.com/) Sidebar into a web application.
+This is a showcase for integrating the [Acrolinx](http://www.acrolinx.com/) Sidebar into a web application.
 
 See: [Getting Started with Custom Integrations](https://support.acrolinx.com/hc/en-us/articles/205687652-Getting-Started-with-Custom-Integrations)
 
