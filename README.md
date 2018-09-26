@@ -56,6 +56,14 @@ Before you start developing your own integration, you might benefit from looking
 
    The best entry point might be the Multi-Editor Example.
 
+### Using the SDK
+
+To install the SDK to your npm-based Acrolinx Integration project call:
+
+```bash
+npm install acrolinx-sidebar-sdk
+```
+
 ### Configuration
 
 See: [config.js](blob/master/samples/config.js)
@@ -78,7 +86,7 @@ If not, implement the [`AdapterInterface`](https://github.com/acrolinx/sidebar-s
 ## References
 
 * This DEMO is built on the [Sidebar SDK JS](https://github.com/acrolinx/sidebar-sdk-js).
-* The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-sdk-js/pluginDoc/modules/_acrolinx_libs_plugin_interfaces_.html).
+* The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-sdk-js/).
 
 ## License
 
