@@ -66,7 +66,7 @@ npm install acrolinx-sidebar-sdk
 
 ### Configuration
 
-See: [config.js](blob/master/samples/config.js)
+See: [config.js](samples/config.js)
 
 ## SDK Features
 
