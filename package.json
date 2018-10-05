@@ -3,7 +3,7 @@
   "description": "Acrolinx Sidebar Demo JavaScript",
   "version": "0.4.0",
   "author": "Acrolinx",
-  "url": "http://www.acrolinx.com",
+  "url": "https://www.acrolinx.com",
   "license": "Apache-2.0",
   "devDependencies": {
     "browser-sync": "^2.24.5"
