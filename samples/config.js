@@ -24,7 +24,7 @@
 
 var basicConf = {
   sidebarContainerId: 'sidebarContainer',
-  //See: https://cdn.rawgit.com/acrolinx/acrolinx-sidebar-demo/v0.3.52/doc/pluginDoc/interfaces/_src_acrolinx_libs_plugin_interfaces_.initparameters.html
+  //See: https://acrolinx.github.io/sidebar-sdk-js/pluginDoc/interfaces/_acrolinx_libs_plugin_interfaces_.initparameters.html
   serverAddress: 'https://test-ssl.acrolinx.com/',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/articles/205687652-Getting-Started-with-Custom-Integrations
@@ -86,33 +86,14 @@ var basicConf = {
   //   }
   // ]
 
-
-// These settings are only effective on servers with disabled checking profiles.
+  // This settings will overwrite the saved settings of the user.
   //checkSettings: {
-  //  'language': 'en',
-  //  'ruleSetName': 'Plain English',
-  //  'termSets': ['Medical'],
-  //  'checkSpelling': true,
-  //  'checkGrammar': true,
-  //  'checkStyle': true,
-  //  'checkReuse': false,
-  //  'harvestTerms': false,
-  //  'checkSeo': false,
-  //  'termStatuses': ['TERMINOLOGY_DEPRECATED']
+  //  'profileId': 'Marketing'
   //}
 
-  // These settings are only effective on servers with disabled checking profiles.
+  // If checkSettings is defined then the defaultCheckSettings will be ignored.
   //defaultCheckSettings: {
-  //  'language': 'en',
-  //  'ruleSetName': 'Plain English',
-  //  'termSets': ['Medical'],
-  //  'checkSpelling': true,
-  //  'checkGrammar': true,
-  //  'checkStyle': true,
-  //  'checkReuse': false,
-  //  'harvestTerms': false,
-  //  'checkSeo': false,
-  //  'termStatuses': ['TERMINOLOGY_DEPRECATED']
+  //  'profileId': 'Marketing'
   //}
 
 };
