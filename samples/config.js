@@ -88,12 +88,12 @@ var basicConf = {
 
   // This settings will overwrite the saved settings of the user.
   //checkSettings: {
-  //  'profileId': 'Marketing'
+  //  'profileId': 'bb276e04-1d75-11e9-9641-484d7eb8db4f'
   //}
 
   // If checkSettings is defined then the defaultCheckSettings will be ignored.
   //defaultCheckSettings: {
-  //  'profileId': 'Marketing'
+  //  'profileId': 'bc07ea88-1d75-11e9-8906-484d7eb8db4f'
   //}
 
 };
