@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+Copyright 20019-present Acrolinx GmbH
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+For more information visit: http://www.acrolinx.com
+-->
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Acrolinx Sidebar TinyMCE Example</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.rawgit.com/tinymce/tinymce-dist/4.2.5/tinymce.min.js"></script>
+</head>
+<body onload="initAcrolinx()">
+<div id="sidebarContainer"></div>
+
+<div id="app" style="position: absolute;left:0px;right: 350px;">
+  <h1>Acrolinx Sidebar TinyMCE Example</h1>
+
+  <p>
+    <a href="index.html">Other Examples</a> | <a
+    href="https://support.acrolinx.com/hc/en-us/articles/205687652-Acrolinx-Sidebar-API-Reference" target="_blank">Getting
+    Started with Custom Integrations</a>
+  </p>
+
+  <textarea name="TinyEditor" id="editor_tinymce" rows="10" cols="40">This textt has more then a errorr.</textarea>
+
+</div>
+
+<script src="https://unpkg.com/acrolinx-sidebar-sdk@0.4.31/dist/acrolinx-sidebar-sdk.js"></script>
+<script src="config.js"></script>
+
+<script>
+  function initAcrolinx() {
+    basicConf.checkSelection = true;
+    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
+    var tinyMceAdapter = new acrolinx.plugins.adapter.TinyMCEAdapter({editorId: 'editor_tinymce'});
+    acrolinxPlugin.registerAdapter(tinyMceAdapter);
+    acrolinxPlugin.init();
+  }
+
+  tinymce.init({
+    selector: "#editor_tinymce",
+    height: 50
+  });
+
+</script>
+</body>
+</html>
