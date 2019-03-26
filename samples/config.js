@@ -27,7 +27,7 @@ var basicConf = {
   //See: https://acrolinx.github.io/sidebar-sdk-js/pluginDoc/interfaces/_acrolinx_libs_plugin_interfaces_.initparameters.html
   serverAddress: 'https://test-ssl.acrolinx.com/',
   //You'll get the clientSignature for your integration after a successful certification meeting.
-  //See: https://support.acrolinx.com/hc/en-us/articles/205687652-Getting-Started-with-Custom-Integrations
+  //See: https://docs.acrolinx.com/customintegrations
   clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5',
 
   /**

@@ -17,9 +17,10 @@ limitations under the License.
 For more information visit: https://www.acrolinx.com
 -->
 <html>
+
 <head lang="en">
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Acrolinx Sidebar CodeMirror Example</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.css">
@@ -27,9 +28,7 @@ For more information visit: https://www.acrolinx.com
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/xml/xml.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/htmlmixed/htmlmixed.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/markdown/markdown.js"></script>
-  <script
-    src="https://code.jquery.com/jquery-3.2.1.js"
-    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
     crossorigin="anonymous"></script>
 
   <!--instead the local bower version could be used: -->
@@ -40,7 +39,7 @@ For more information visit: https://www.acrolinx.com
   <!--<script src="/bower_components/jquery/dist/jquery.js"></script>-->
 
 
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 
   <style>
     #documentReferenceSection {
@@ -49,37 +48,38 @@ For more information visit: https://www.acrolinx.com
   </style>
 
 </head>
+
 <body>
-<div id="sidebarContainer"></div>
+  <div id="sidebarContainer"></div>
 
 
-<div id="app">
-  <h1>Acrolinx Sidebar CodeMirror Example</h1>
+  <div id="app">
+    <h1>Acrolinx Sidebar CodeMirror Example</h1>
 
-  <p>
-    <a href="index.html">Other Examples</a> | <a
-    href="https://support.acrolinx.com/hc/en-us/articles/205687652-Acrolinx-Sidebar-API-Reference" target="_blank">Getting
-    Started with Custom Integrations</a>
-  </p>
+    <p>
+      <a href="index.html">Other Examples</a> | <a href="https://docs.acrolinx.com/customintegrations" target="_blank">Getting
+        Started with Custom Integrations</a>
+    </p>
 
-  <select id="exampleSelector"></select>
+    <select id="exampleSelector"></select>
 
-  <div id="documentReferenceSection" style="display: none">
-    <label for="documentReferenceInput">documentReference:</label>
-    <input type="text" id="documentReferenceInput" size="50"/>
-  </div>
+    <div id="documentReferenceSection" style="display: none">
+      <label for="documentReferenceInput">documentReference:</label>
+      <input type="text" id="documentReferenceInput" size="50" />
+    </div>
 
-  <textarea rows="25" cols="80" id="editor" spellcheck="false">
+    <textarea rows="25" cols="80" id="editor" spellcheck="false">
 </textarea>
 
-</div>
+  </div>
 
 
-<script src="https://unpkg.com/acrolinx-sidebar-sdk/dist/acrolinx-sidebar-sdk.js"></script>
-<script src="config.js"></script>
+  <script src="https://unpkg.com/acrolinx-sidebar-sdk/dist/acrolinx-sidebar-sdk.js"></script>
+  <script src="config.js"></script>
 
-<!--<script src="codemirror-example-data.js"></script>-->
-<script src="codemirror.js"></script>
+  <!--<script src="codemirror-example-data.js"></script>-->
+  <script src="codemirror.js"></script>
 
 </body>
+
 </html>
