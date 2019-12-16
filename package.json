@@ -9,6 +9,7 @@
     "browser-sync": "^2.26.7",
     "chromedriver": "^78.0.1",
     "jest": "^24.9.0",
+    "jest-junit": "^10.0.0",
     "selenium-webdriver": "^3.6.0"
   },
   "scripts": {
