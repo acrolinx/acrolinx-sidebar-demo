@@ -6,9 +6,13 @@
   "url": "https://www.acrolinx.com",
   "license": "Apache-2.0",
   "devDependencies": {
-    "browser-sync": "^2.24.5"
+    "browser-sync": "^2.26.7",
+    "chromedriver": "^78.0.1",
+    "jest": "^24.9.0",
+    "selenium-webdriver": "^3.6.0"
   },
   "scripts": {
-    "start": "browser-sync start --server --files \"samples/**/*\" --startPath samples --cors"
+    "start": "browser-sync start --server --files \"samples/**/*\" --startPath samples --cors",
+    "test": "jest"
   }
 }
