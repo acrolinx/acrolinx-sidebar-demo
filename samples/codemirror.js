@@ -55,6 +55,8 @@ function initAcrolinxPlugin() {
   acrolinxPlugin.registerAdapter(adapter);
 
   acrolinxPlugin.init();
+
+  return acrolinxPlugin;
 }
 
 function isAutoExampleSelected() {
@@ -78,7 +80,7 @@ function init() {
     setupExampleSelector();
     initSelectedExample();
     exampleSelector.addEventListener('change', initSelectedExample);
-    initAcrolinxPlugin();
+    window.acrolinxPlugin = initAcrolinxPlugin();
   });
 }
 
