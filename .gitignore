@@ -6,3 +6,6 @@ npm-debug.log
 
 .private
 tmp
+.tscache
+bower_components
+.env
