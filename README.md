@@ -36,8 +36,8 @@ Before you start developing your own integration, you might benefit from looking
 
 ### Run Locally in a Web Browser
 
-1. Make sure, that you have installed nodejs that includes npm.
-2. In your console navigate into the projects root folder and install all required node modules with:
+1. Make sure, that you have installed NodeJS that includes npm.
+2. In your console navigate into the projects root folder and install all the required node modules with:
 
    ```bash
    npm install
