@@ -42,6 +42,10 @@ var basicConf = {
     return window.location.href;
   },
 
+  log: localStorage.getItem('devAcrolinxLog') === 'true' && function (logEntry) {
+    console.log('log:', logEntry);
+  },
+
   /**
    * This optional function will be called after a successful check,
    * if Embed Check Data is enabled on the Acrolinx core server.
