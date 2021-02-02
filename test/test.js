@@ -37,10 +37,14 @@ describe("live demo", () => {
   if (!process.env.withwindow) {
     chromeOptions.headless();
   }
-  let driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
-  driver.manage().setTimeouts({ implicit: TIMEOUT_MS });
+  let driver;
 
-  afterAll(async () => {
+  beforeEach(async () => {
+    driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+    driver.manage().setTimeouts({ implicit: TIMEOUT_MS });
+  }, TIMEOUT_MS);
+
+  afterEach(async () => {
     await driver.quit();
   }, TIMEOUT_MS);
 
@@ -90,16 +94,21 @@ describe("live demo", () => {
     await driver.switchTo().frame(sidebarInnerIFrame);
   }
 
-  const runLiveCodingCodeInPageScope = async () => {
-    const code = fs.readFileSync('samples/live-coding.js', "UTF-8");
+  const runLiveCodingCodeInPageScope = async (sampleScriptName) => {
+    const code = fs.readFileSync('samples/' + sampleScriptName, "UTF-8");
     await driver.executeScript(code);
   }
 
-  const loadPageAndPrepareSampleContent = async () => {
+  const loadCmPageAndPrepareSampleContent = async () => {
     await driver.get('https://codemirror.net/');
     await driver.wait(Until.elementLocated(By.css('.CodeMirror')));
     const setCodeMirrorContent = 'document.getElementsByClassName("CodeMirror")[0].CodeMirror.setValue("<html><body><h1>live demo</h1><div>This is an tesst</div></body></html>")';
     await driver.executeScript(setCodeMirrorContent);
+  }
+
+  const loadCkPage = async () => {
+    await driver.get('https://ckeditor.com/ckeditor-4/demo/');
+    await driver.wait(Until.elementLocated(By.css('#cke_ckdemo')));
   }
 
   const clickSignInAndswitchToNewWindow = async () => {
@@ -145,10 +154,30 @@ describe("live demo", () => {
     await (await getWaiting(By.css(".button-check--inline:not(.disabled)"))).click();
   }
 
-  it("live coding", async () => {
-    await loadPageAndPrepareSampleContent();
+  it("live coding ckeditor", async () => {
+    await loadCkPage();
 
-    await runLiveCodingCodeInPageScope();
+    await runLiveCodingCodeInPageScope('live-coding-ck.js');
+
+    await switchToSidebarFrameWithinTheFloatingSidebar();
+    await checkSidebarAboutAndReturn();
+
+    await clickSignInAndswitchToNewWindow();
+    await signInAndConfirm();
+    await closeWindowAndSwitchBackToMainWindow();
+    await switchToSidebarFrameWithinTheFloatingSidebar();
+
+    await waitForSidebarCompleteSignInAndCheck();
+
+    const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
+
+    expect(issuesMessage).toMatch(/1[123]\s*issues/); //expect 12 but let's be more tolerant and allow 11 and 13 as well ;-)
+  });
+
+  it("live coding code mirror", async () => {
+    await loadCmPageAndPrepareSampleContent();
+
+    await runLiveCodingCodeInPageScope('live-coding.js');
 
     await switchToSidebarFrameWithinTheFloatingSidebar();
     await checkSidebarAboutAndReturn();
@@ -164,5 +193,6 @@ describe("live demo", () => {
 
     expect(issuesMessage).toMatch(/[345]\s*issues/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
   });
+
 });
 
