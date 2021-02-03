@@ -49,8 +49,7 @@ describe("live demo", () => {
   }, TIMEOUT_MS * 2);
 
   const getWaiting = async (locator) => {
-    await driver.wait(Until.elementLocated(locator), TIMEOUT_MS);
-    return driver.findElement(locator);
+    return await driver.wait(Until.elementLocated(locator), TIMEOUT_MS);
   };
 
   it("displays Sidebar SDK JS version in the about-page of the start-page", async () => {
@@ -120,12 +119,9 @@ describe("live demo", () => {
 
     await (await getWaiting(By.css('.signinOpenBrowserButton'))).click();
 
-    for (var i = 0; i < (TIMEOUT_MS / 2 * 50); i++) {
-      if ((await driver.getAllWindowHandles()).length == 2) {
-        break;
-      }
-      await driver.sleep(50);
-    }
+    await driver.wait(async () => {
+      return (await driver.getAllWindowHandles()).length == 2;
+    }, TIMEOUT_MS);
 
     const windowsAfter = await driver.getAllWindowHandles();
 
