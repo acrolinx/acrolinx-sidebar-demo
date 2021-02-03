@@ -109,7 +109,7 @@ describe("live demo", () => {
   const loadCkPageAndPrepareContent = async () => {
     await driver.get('https://ckeditor.com/ckeditor-4/demo/');
     await driver.wait(Until.elementLocated(By.css('#cke_ckdemo')));
-    const setCkContent = 'CKEDITOR.instances["ckdemo"].setData("This is an tesst");';
+    const setCkContent = 'while(!(CKEDITOR && CKEDITOR.instances["ckdemo"] && CKEDITOR.instances["ckdemo"].status =="ready")) {}; CKEDITOR.instances["ckdemo"].setData("This is an tesst");';
     await driver.executeScript(setCkContent);
   }
 
