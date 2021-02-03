@@ -30,7 +30,7 @@ const TIMEOUT_MS = 30000;
 
 describe("live demo", () => {
 
-  jest.setTimeout(TIMEOUT_MS);
+  jest.setTimeout(TIMEOUT_MS * 2);
 
   const chromeOptions = new chrome.Options();
   chromeOptions.addArguments("--remote-debugging-port=9225");
@@ -42,14 +42,14 @@ describe("live demo", () => {
   beforeEach(async () => {
     driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     driver.manage().setTimeouts({ implicit: TIMEOUT_MS });
-  }, TIMEOUT_MS);
+  }, TIMEOUT_MS * 2);
 
   afterEach(async () => {
     await driver.quit();
-  }, TIMEOUT_MS);
+  }, TIMEOUT_MS * 2);
 
   const getWaiting = async (locator) => {
-    await driver.wait(Until.elementLocated(locator));
+    await driver.wait(Until.elementLocated(locator), TIMEOUT_MS);
     return driver.findElement(locator);
   };
 
@@ -106,9 +106,11 @@ describe("live demo", () => {
     await driver.executeScript(setCodeMirrorContent);
   }
 
-  const loadCkPage = async () => {
+  const loadCkPageAndPrepareContent = async () => {
     await driver.get('https://ckeditor.com/ckeditor-4/demo/');
     await driver.wait(Until.elementLocated(By.css('#cke_ckdemo')));
+    const setCkContent = 'CKEDITOR.instances["ckdemo"].setData("This is an tesst");';
+    await driver.executeScript(setCkContent);
   }
 
   const clickSignInAndswitchToNewWindow = async () => {
@@ -118,11 +120,11 @@ describe("live demo", () => {
 
     await (await getWaiting(By.css('.signinOpenBrowserButton'))).click();
 
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < (TIMEOUT_MS / 2 * 50); i++) {
       if ((await driver.getAllWindowHandles()).length == 2) {
         break;
       }
-      await driver.sleep(500);
+      await driver.sleep(50);
     }
 
     const windowsAfter = await driver.getAllWindowHandles();
@@ -155,7 +157,7 @@ describe("live demo", () => {
   }
 
   it("live coding ckeditor", async () => {
-    await loadCkPage();
+    await loadCkPageAndPrepareContent();
 
     await runLiveCodingCodeInPageScope('live-coding-ck.js');
 
@@ -171,7 +173,7 @@ describe("live demo", () => {
 
     const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
 
-    expect(issuesMessage).toMatch(/1[123]\s*issues/); //expect 12 but let's be more tolerant and allow 11 and 13 as well ;-)
+    expect(issuesMessage).toMatch(/[345]\s*issues/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
   });
 
   it("live coding code mirror", async () => {
