@@ -108,8 +108,15 @@ describe("live demo", () => {
   const loadCkPageAndPrepareContent = async () => {
     await driver.get('https://ckeditor.com/ckeditor-4/demo/');
     await driver.wait(Until.elementLocated(By.css('#cke_ckdemo')));
-    await driver.wait(Until.elementLocated(By.css('iframe.cke_wysiwyg_frame')));
+    const contentIframe = await driver.wait(Until.elementLocated(By.css('iframe.cke_wysiwyg_frame')));
     await driver.wait(Until.elementLocated(By.css('#cke_1_contents')));
+
+    await driver.switchTo().frame(contentIframe);
+
+    await driver.wait(Until.elementLocated(By.xpath('//h2[text()[contains(.,"Essential")]]')));
+
+    await driver.switchTo().defaultContent();
+
     const setCkContent = 'while(!(CKEDITOR && CKEDITOR.instances["ckdemo"] && CKEDITOR.instances["ckdemo"].status =="ready")) {}; CKEDITOR.instances["ckdemo"].setData("This is an tesst");';
     await driver.executeScript(setCkContent);
   }
