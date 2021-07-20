@@ -52,14 +52,9 @@ if (window.acrolinxSidebar) {
     };
     plainAdapter.prototype = _.extend(new acrolinx.plugins.adapter.AbstractRichtextEditorAdapter(), {
       extractContentForCheck: function() {
-        return new Promise(function(resolve, reject) {
-          //exclude sidebar element
-          resolve({content:$('html').html()});
-          reject(new Error("ignore")); // ignored
-        });
-        // ... add look up functionality by implementing selectRange 
+        return {content:$('html').html()};
       },
-
+      // ... add look up functionality by implementing selectRange 
     });
 
    window.acrolinxSidebar.plainAdapter = plainAdapter;
