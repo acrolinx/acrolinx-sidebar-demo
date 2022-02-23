@@ -55,10 +55,9 @@ describe("live demo", () => {
   it("displays Sidebar SDK JS version in the about-page of the start-page", async () => {
     await driver.get('https://acrolinx.github.io/acrolinx-sidebar-demo/samples/single-editor.html');
 
-    const sidebarIFrame = await getWaiting(By.css('iframe'));
-    driver.switchTo().frame(sidebarIFrame);
-
-    (await getWaiting(By.linkText('About Acrolinx'))).click();
+    const sidebarIFrame = await getWaiting(By.css('#sidebarContainer iframe'));
+    await driver.switchTo().frame(sidebarIFrame);
+    await (await getWaiting(By.linkText('About Acrolinx'))).click();
 
     const sdkVersionLocator = By.xpath('//div[@class= "about-tab-label" and text() = "Sidebar SDK JS"]/following-sibling::div');
     const sdkVersion = await (await getWaiting(sdkVersionLocator)).getText();
