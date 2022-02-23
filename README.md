@@ -1,5 +1,7 @@
 # Acrolinx Sidebar Demo
 
+[![Build](https://github.com/acrolinx/acrolinx-sidebar-demo/actions/workflows/main.yml/badge.svg)](https://github.com/acrolinx/acrolinx-sidebar-demo/actions/workflows/main.yml)
+
 This is a showcase for integrating the [Acrolinx](https://www.acrolinx.com/) Sidebar into a web application.
 
 See: [Getting Started with Custom Integrations](https://docs.acrolinx.com/customintegrations)
@@ -70,7 +72,7 @@ See: [config.js](samples/config.js)
 
 ## SDK Features
 
-The SDK provides [adapters](https://github.com/acrolinx/sidebar-sdk-js/tree/master/src/adapters) for:
+The SDK provides [adapters](https://github.com/acrolinx/sidebar-sdk-js/tree/main/src/adapters) for:
 
 * `contentEditable` `div`-elements,
 * `input` text elements,
@@ -81,7 +83,7 @@ The SDK provides [adapters](https://github.com/acrolinx/sidebar-sdk-js/tree/mast
 * `MultiEditorAdapter` that can be used to combine different adapters as one document.
 
 If you need to support other editors, sometimes the `ContentEditableAdapter` works without any changes.
-If not, implement the [`AdapterInterface`](https://github.com/acrolinx/sidebar-sdk-js/blob/master/src/adapters/AdapterInterface.ts).
+If not, implement the [`AdapterInterface`](https://github.com/acrolinx/sidebar-sdk-js/blob/main/src/adapters/AdapterInterface.ts).
 
 ## References
 
