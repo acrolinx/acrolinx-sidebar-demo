@@ -1,6 +1,7 @@
 # Acrolinx Sidebar Demo
 
 [![Build](https://github.com/acrolinx/acrolinx-sidebar-demo/actions/workflows/main.yml/badge.svg)](https://github.com/acrolinx/acrolinx-sidebar-demo/actions/workflows/main.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=acrolinx_acrolinx-sidebar-demo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=acrolinx_acrolinx-sidebar-demo)
 
 This is a showcase for integrating the [Acrolinx](https://www.acrolinx.com/) Sidebar into a web application.
 
