@@ -67,6 +67,10 @@ To install the SDK to your npm-based Acrolinx Integration project call:
 npm install acrolinx-sidebar-sdk
 ```
 
+### Integration Boilerplate Sample
+
+See: [Boilerplate using Node and NPM](samples/boilerplate/README.md)
+
 ### Configuration
 
 See: [config.js](samples/config.js)
