@@ -2,6 +2,9 @@
   "name": "acrolinx-integration-boilerplate",
   "version": "0.2.0",
   "description": "Get started with Acrolinx Integrations",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
