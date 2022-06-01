@@ -60,7 +60,6 @@ var basicConf = {
   //helpUrl: 'https://www.acrolinx.com',
   //showServerSelector: true,
   //readOnlySuggestions: true,
-  //sidebarUrl:'https://<LOCAL_SERVER_ADDRESS>/sidebar/v14/',
 
   //enableSingleSignOn: true, //see: https://github.com/acrolinx/acrolinx-proxy-sample
 
