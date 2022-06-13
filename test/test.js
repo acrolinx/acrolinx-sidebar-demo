@@ -98,7 +98,7 @@ describe("live demo", () => {
   }
 
   const loadCmPageAndPrepareSampleContent = async () => {
-    await driver.get('https://codemirror.net/');
+    await driver.get('https://codemirror.net/5/');
     await driver.wait(Until.elementLocated(By.css('.CodeMirror')));
     const setCodeMirrorContent = 'document.getElementsByClassName("CodeMirror")[0].CodeMirror.setValue("<html><body><h1>live demo</h1><div>This is an tesst</div></body></html>")';
     await driver.executeScript(setCodeMirrorContent);
@@ -177,7 +177,7 @@ describe("live demo", () => {
 
     const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
 
-    expect(issuesMessage).toMatch(/[345]\s*issues/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
+    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
   });
 
   it("live coding code mirror", async () => {
