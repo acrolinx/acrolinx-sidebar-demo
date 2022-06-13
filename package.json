@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "browser-sync": "^2.27.7",
-    "chromedriver": "^98.0.1",
+    "chromedriver": "^102.0.0",
     "dotenv": "^16.0.0",
     "jest": "^27.5.1",
     "jest-junit": "^13.0.0",
