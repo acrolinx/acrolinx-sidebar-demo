@@ -53,7 +53,7 @@ Before you start developing your own integration, you might benefit from looking
    ```
 
 4. Now open [http://localhost:3000/samples](http://localhost:3000/samples) in your web-browser.
-5. Choose the sample, that you want to see. Use `https://test-ssl.acrolinx.com` as the Acrolinx URL.
+5. Choose the sample, that you want to see. Use `https://partner-dev.internal.acrolinx.sh/` as the Acrolinx URL.
 
    ![Screenshot of Example](doc/screenshot.png)
 

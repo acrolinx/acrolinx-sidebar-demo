@@ -37,7 +37,7 @@ if (window.acrolinxSidebar) {
     window.acrolinxSidebar = new acrolinx.plugins.initFloatingSidebar({ asyncStorage: new acrolinx.plugins.AsyncLocalStorage() });
 
     var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin({
-      serverAddress: 'https://test-ssl.acrolinx.com/',
+      serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
       sidebarContainerId: 'acrolinxSidebarContainer',
       showServerSelector: false,
       clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5',
