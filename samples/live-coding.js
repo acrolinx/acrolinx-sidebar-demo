@@ -46,7 +46,7 @@ if (window.acrolinxSidebar) {
       },
     });
 
-    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CodeMirrorAdapter({ editor: document.querySelector('.CodeMirror').CodeMirror }));
+    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CodeMirror6Adapter({ editor: document.querySelector('#editor')})); // text editor area id as #editor
 
     acrolinxPlugin.init();
   });
