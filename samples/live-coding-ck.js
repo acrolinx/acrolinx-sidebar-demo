@@ -19,7 +19,7 @@
  */
 
 /*
-  1. GoTo: [ckeditor.com/ckeditor-5/demo](https://ckeditor.com/ckeditor-5/demo/).
+  1. GoTo: [ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html](https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html).
   2. Open Browser Console (F12).
   3. Paste this code to the console prompt.
   4. Hit enter key.
@@ -46,7 +46,8 @@ if (window.acrolinxSidebar) {
       },
     });
 
-    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CKEditor5Adapter({ editorId: "ckdemo" }));
+    // Pass the html element id of the editor here.
+    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CKEditor5Adapter({ editorId: "snippet-balloon-editor" }));
 
     acrolinxPlugin.init();
   });
