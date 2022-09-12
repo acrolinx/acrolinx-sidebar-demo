@@ -46,7 +46,8 @@ if (window.acrolinxSidebar) {
       },
     });
 
-    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CodeMirrorAdapter({ editor: document.querySelector('.CodeMirror').CodeMirror }));
+    // Pass object of EditorView type here. view is already created on page load by codemirror.net
+    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CodeMirror6Adapter({ editor: view}));
 
     acrolinxPlugin.init();
   });
