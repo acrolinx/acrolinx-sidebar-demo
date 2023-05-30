@@ -13,6 +13,7 @@
   },
   "license": "Apache License 2.0",
   "devDependencies": {
+    "@acrolinx/sidebar-interface": "^15.2.0",
     "@babel/core": "^7.17.7",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
@@ -37,8 +38,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@acrolinx/sidebar-interface": "^15.0.0",
-    "@acrolinx/sidebar-sdk": "^0.4.71",
+    "@acrolinx/sidebar-sdk": "^1.1.0",
     "@babel/runtime": "^7.17.7",
     "normalize.css": "^8.0.1"
   },
