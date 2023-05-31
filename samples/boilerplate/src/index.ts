@@ -19,8 +19,6 @@ import { AcrolinxPlugin, ContentEditableAdapter } from '@acrolinx/sidebar-sdk';
 
   const basicConf: AcrolinxPluginConfig = {
     sidebarContainerId: 'sidebar-container',
-    // Version >= '15.0.0' is only available with Acrolinx platform version 2021.12.1 or higher
-    minimumSidebarVersion: '14.11.1',
     // Signature given to you by Acrolinx.
     clientSignature:
       'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5',
