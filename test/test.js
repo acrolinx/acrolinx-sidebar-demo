@@ -33,7 +33,6 @@ describe("live demo", () => {
   jest.setTimeout(TIMEOUT_MS * 2);
 
   const chromeOptions = new chrome.Options();
-  chromeOptions.setBinaryPath("/usr/bin/google-chrome");
   chromeOptions.addArguments("--remote-debugging-port=9225");
   if (!process.env.withwindow) {
     chromeOptions.headless();
