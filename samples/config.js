@@ -27,7 +27,7 @@ var basicConf = {
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
   serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
   //You'll get the clientSignature for your integration after a successful certification meeting.
-  //See: https://docs.acrolinx.com/customintegrations
+  //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
   clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5',
 
   /**
