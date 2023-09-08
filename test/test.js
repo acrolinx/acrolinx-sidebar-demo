@@ -195,7 +195,7 @@ describe("live demo", () => {
 
     const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
 
-    expect(issuesMessage).not.toBe(""); 
+    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues/);
   });
 
 });
