@@ -98,17 +98,15 @@ describe("live demo", () => {
   }
 
   const loadCmPageAndPrepareSampleContent = async () => {
-    await driver.get('https://codemirror.net/5/');
-    await driver.wait(Until.elementLocated(By.css('.CodeMirror')));
-    const setCodeMirrorContent = 'document.getElementsByClassName("CodeMirror")[0].CodeMirror.setValue("<html><body><h1>live demo</h1><div>This is an tesst</div></body></html>")';
+    await driver.get('https://codemirror.net/');
+    const setCodeMirrorContent = 'view.dispatch(view.state.update({changes: {from: 0, to: view.state.doc.length, insert: "<html><body><h1>live demo</h1><div>This is an tesst</div></body></html>"}}));';
     await driver.executeScript(setCodeMirrorContent);
   }
 
   const loadCkPageAndPrepareContent = async () => {
     await driver.get('https://ckeditor.com/ckeditor-4/demo/');
-    await driver.wait(Until.elementLocated(By.css('#cke_ckdemo')));
+    await driver.wait(Until.elementLocated(By.css('#cke_ckdemoarticle')));
     const contentIframe = await driver.wait(Until.elementLocated(By.css('iframe.cke_wysiwyg_frame')));
-    await driver.wait(Until.elementLocated(By.css('#cke_1_contents')));
 
     await driver.switchTo().frame(contentIframe);
 
@@ -116,7 +114,7 @@ describe("live demo", () => {
 
     await driver.switchTo().defaultContent();
 
-    const setCkContent = 'while(!(CKEDITOR && CKEDITOR.instances["ckdemo"] && CKEDITOR.instances["ckdemo"].status =="ready")) {}; CKEDITOR.instances["ckdemo"].setData("This is an tesst");';
+    const setCkContent = 'while(!(CKEDITOR && CKEDITOR.instances["ckdemoarticle"] && CKEDITOR.instances["ckdemoarticle"].status =="ready")) {}; CKEDITOR.instances["ckdemoarticle"].setData("This is an tesst");';
     await driver.executeScript(setCkContent);
   }
 
