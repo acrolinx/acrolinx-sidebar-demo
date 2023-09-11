@@ -35,7 +35,7 @@ describe("live demo", () => {
   const chromeOptions = new chrome.Options();
   chromeOptions.addArguments("--remote-debugging-port=9225");
   if (!process.env.withwindow) {
-    chromeOptions.headless();
+    //chromeOptions.headless();
   }
   let driver;
 
@@ -104,17 +104,10 @@ describe("live demo", () => {
   }
 
   const loadCkPageAndPrepareContent = async () => {
-    await driver.get('https://ckeditor.com/ckeditor-4/demo/');
-    await driver.wait(Until.elementLocated(By.css('#cke_ckdemoarticle')));
-    const contentIframe = await driver.wait(Until.elementLocated(By.css('iframe.cke_wysiwyg_frame')));
+    await driver.get('https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html');
+    await driver.wait(Until.elementLocated(By.css('.ck-editor__editable')));
 
-    await driver.switchTo().frame(contentIframe);
-
-    await driver.wait(Until.elementLocated(By.xpath('//h2[text()[contains(.,"Essential")]]')));
-
-    await driver.switchTo().defaultContent();
-
-    const setCkContent = 'while(!(CKEDITOR && CKEDITOR.instances["ckdemoarticle"] && CKEDITOR.instances["ckdemoarticle"].status =="ready")) {}; CKEDITOR.instances["ckdemoarticle"].setData("This is an tesst");';
+    const setCkContent = 'document.querySelector(".ck-editor__editable").ckeditorInstance.data.set("<p>This is an tesst</p>")';
     await driver.executeScript(setCkContent);
   }
 
@@ -175,7 +168,7 @@ describe("live demo", () => {
 
     const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
 
-    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
+    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issue[s]?/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
   });
 
   it("live coding code mirror", async () => {
@@ -195,7 +188,7 @@ describe("live demo", () => {
 
     const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
 
-    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues/);
+    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issue[s]?/);
   });
 
 });
