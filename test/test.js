@@ -118,10 +118,10 @@ describe('live demo', () => {
     await driver.get(
       'https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html'
     );
-    const ckeditioClass = '.ck-editor__editable';
-    await driver.wait(Until.elementLocated(By.css(ckeditioClass)));
+    const ckeditiorClass = '.ck-editor__editable';
+    await driver.wait(Until.elementLocated(By.css(ckeditiorClass)));
 
-    const setCkContent = `document.querySelector("${ckeditioClass}").ckeditorInstance.data.set("<p>This is an tesst</p>")`;
+    const setCkContent = `document.querySelector("${ckeditiorClass}").ckeditorInstance.data.set("<p>This is an tesst</p>")`;
     await driver.executeScript(setCkContent);
   };
 
