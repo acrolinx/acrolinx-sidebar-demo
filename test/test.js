@@ -28,19 +28,21 @@ const Until = webdriver.until;
 
 const TIMEOUT_MS = 30000;
 
-describe("live demo", () => {
-
+describe('live demo', () => {
   jest.setTimeout(TIMEOUT_MS * 2);
 
   const chromeOptions = new chrome.Options();
-  chromeOptions.addArguments("--remote-debugging-port=9225");
+  chromeOptions.addArguments('--remote-debugging-port=9225');
   if (!process.env.withwindow) {
     chromeOptions.headless();
   }
   let driver;
 
   beforeEach(async () => {
-    driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+    driver = new webdriver.Builder()
+      .forBrowser('chrome')
+      .setChromeOptions(chromeOptions)
+      .build();
     driver.manage().setTimeouts({ implicit: TIMEOUT_MS });
   }, TIMEOUT_MS * 2);
 
@@ -52,14 +54,18 @@ describe("live demo", () => {
     return await driver.wait(Until.elementLocated(locator), TIMEOUT_MS);
   };
 
-  it("displays Sidebar SDK JS version in the about-page of the start-page", async () => {
-    await driver.get('https://acrolinx.github.io/acrolinx-sidebar-demo/samples/single-editor.html');
+  it('displays Sidebar SDK JS version in the about-page of the start-page', async () => {
+    await driver.get(
+      'https://acrolinx.github.io/acrolinx-sidebar-demo/samples/single-editor.html'
+    );
 
     const sidebarIFrame = await getWaiting(By.css('#sidebarContainer iframe'));
     await driver.switchTo().frame(sidebarIFrame);
     await (await getWaiting(By.linkText('About Acrolinx'))).click();
 
-    const sdkVersionLocator = By.xpath('//div[@class= "about-tab-label" and text() = "Sidebar SDK JS"]/following-sibling::div');
+    const sdkVersionLocator = By.xpath(
+      '//div[@class= "about-tab-label" and text() = "Sidebar SDK JS"]/following-sibling::div'
+    );
     const sdkVersion = await (await getWaiting(sdkVersionLocator)).getText();
 
     const versionParts = sdkVersion.split('.');
@@ -72,7 +78,9 @@ describe("live demo", () => {
   const checkSidebarAboutAndReturn = async () => {
     await (await getWaiting(By.css('.signinAboutLink'))).click();
 
-    const sdkVersionLocator = By.xpath('//div[@class= "about-tab-label" and text() = "Sidebar SDK JS"]/following-sibling::div');
+    const sdkVersionLocator = By.xpath(
+      '//div[@class= "about-tab-label" and text() = "Sidebar SDK JS"]/following-sibling::div'
+    );
     const sdkVersion = await (await getWaiting(sdkVersionLocator)).getText();
 
     const versionParts = sdkVersion.split('.');
@@ -82,34 +90,40 @@ describe("live demo", () => {
     });
 
     await (await getWaiting(By.css('.icon-menuBack'))).click();
-  }
+  };
 
   const switchToSidebarFrameWithinTheFloatingSidebar = async () => {
-    const sidebarIFrame = await getWaiting(By.css('#acrolinxSidebarContainer iframe'));
+    const sidebarIFrame = await getWaiting(
+      By.css('#acrolinxSidebarContainer iframe')
+    );
     await driver.switchTo().frame(sidebarIFrame);
 
     const sidebarInnerIFrame = await getWaiting(By.css('iframe'));
     await driver.switchTo().frame(sidebarInnerIFrame);
-  }
+  };
 
   const runLiveCodingCodeInPageScope = async (sampleScriptName) => {
-    const code = fs.readFileSync('samples/' + sampleScriptName, "UTF-8");
+    const code = fs.readFileSync('samples/' + sampleScriptName, 'UTF-8');
     await driver.executeScript(code);
-  }
+  };
 
   const loadCmPageAndPrepareSampleContent = async () => {
     await driver.get('https://codemirror.net/');
-    const setCodeMirrorContent = 'view.dispatch(view.state.update({changes: {from: 0, to: view.state.doc.length, insert: "<html><body><h1>live demo</h1><div>This is an tesst</div></body></html>"}}));';
+    const setCodeMirrorContent =
+      'view.dispatch(view.state.update({changes: {from: 0, to: view.state.doc.length, insert: "<html><body><h1>live demo</h1><div>This is an tesst</div></body></html>"}}));';
     await driver.executeScript(setCodeMirrorContent);
-  }
+  };
 
   const loadCkPageAndPrepareContent = async () => {
-    await driver.get('https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html');
-    await driver.wait(Until.elementLocated(By.css('.ck-editor__editable')));
+    await driver.get(
+      'https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html'
+    );
+    const ckeditioClass = '.ck-editor__editable';
+    await driver.wait(Until.elementLocated(By.css(ckeditioClass)));
 
-    const setCkContent = 'document.querySelector(".ck-editor__editable").ckeditorInstance.data.set("<p>This is an tesst</p>")';
+    const setCkContent = `document.querySelector("${ckeditioClass}").ckeditorInstance.data.set("<p>This is an tesst</p>")`;
     await driver.executeScript(setCkContent);
-  }
+  };
 
   const clickSignInAndswitchToNewWindow = async () => {
     const windowsBefore = await driver.getAllWindowHandles();
@@ -127,31 +141,37 @@ describe("live demo", () => {
     expect(windowsAfter.length).toEqual(2);
 
     await driver.switchTo().window(windowsAfter[1]);
-  }
+  };
 
   const signInAndConfirm = async () => {
-    await (await getWaiting(By.css("input[name='username']"))).sendKeys(process.env.testserver_username);
-    await (await getWaiting(By.css("input[name='password']"))).sendKeys(process.env.testserver_password);
+    await (
+      await getWaiting(By.css("input[name='username']"))
+    ).sendKeys(process.env.testserver_username);
+    await (
+      await getWaiting(By.css("input[name='password']"))
+    ).sendKeys(process.env.testserver_password);
 
     await (await getWaiting(By.css("button[type='submit']"))).click();
 
     const confirmButton = By.xpath('//button[text()[contains(.,"Confirm")]]');
     await (await getWaiting(confirmButton)).click();
 
-    await driver.wait(Until.elementLocated(By.css("#confirm-message")));
-  }
+    await driver.wait(Until.elementLocated(By.css('#confirm-message')));
+  };
   const closeWindowAndSwitchBackToMainWindow = async () => {
     await driver.close();
 
     expect((await driver.getAllWindowHandles()).length).toEqual(1);
     await driver.switchTo().window((await driver.getAllWindowHandles())[0]);
-  }
+  };
 
   const waitForSidebarCompleteSignInAndCheck = async () => {
-    await (await getWaiting(By.css(".button-check--inline:not(.disabled)"))).click();
-  }
+    await (
+      await getWaiting(By.css('.button-check--inline:not(.disabled)'))
+    ).click();
+  };
 
-  it("live coding ckeditor", async () => {
+  it('live coding ckeditor', async () => {
     await loadCkPageAndPrepareContent();
 
     await runLiveCodingCodeInPageScope('live-coding-ck.js');
@@ -166,12 +186,14 @@ describe("live demo", () => {
 
     await waitForSidebarCompleteSignInAndCheck();
 
-    const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
+    const issuesMessage = await (
+      await getWaiting(By.css('.issue-count-banner'))
+    ).getText();
 
-    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issue[s]?/); //expect 4 but let's be more tolerant and allow 3 and 5 as well ;-)
+    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues?/);
   });
 
-  it("live coding code mirror", async () => {
+  it('live coding code mirror', async () => {
     await loadCmPageAndPrepareSampleContent();
 
     await runLiveCodingCodeInPageScope('live-coding.js');
@@ -186,10 +208,10 @@ describe("live demo", () => {
 
     await waitForSidebarCompleteSignInAndCheck();
 
-    const issuesMessage = await (await getWaiting(By.css(".issue-count-banner"))).getText();
+    const issuesMessage = await (
+      await getWaiting(By.css('.issue-count-banner'))
+    ).getText();
 
-    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issue[s]?/);
+    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues?/);
   });
-
 });
-
