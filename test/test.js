@@ -29,6 +29,7 @@ const Until = webdriver.until;
 const TIMEOUT_MS = 30000;
 
 describe('live demo', () => {
+  const wordAndIssuesRegex = '/\d words and \d issues?/';
   jest.setTimeout(TIMEOUT_MS * 2);
 
   const chromeOptions = new chrome.Options();
@@ -190,7 +191,7 @@ describe('live demo', () => {
       await getWaiting(By.css('.issue-count-banner'))
     ).getText();
 
-    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues?/);
+    expect(issuesMessage).toMatch(wordAndIssuesRegex);
   });
 
   it('live coding code mirror', async () => {
@@ -212,6 +213,6 @@ describe('live demo', () => {
       await getWaiting(By.css('.issue-count-banner'))
     ).getText();
 
-    expect(issuesMessage).toMatch(/[\d]\s*words and [\d]\s*issues?/);
+    expect(issuesMessage).toMatch(wordAndIssuesRegex);
   });
 });
