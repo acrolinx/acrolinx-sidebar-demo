@@ -29,7 +29,7 @@ const Until = webdriver.until;
 const TIMEOUT_MS = 30000;
 
 describe('live demo', () => {
-  const wordAndIssuesRegex = '/\d words and \d issues?/';
+  const wordAndIssuesRegex = /\d words and \d issues?/;
   jest.setTimeout(TIMEOUT_MS * 2);
 
   const chromeOptions = new chrome.Options();
