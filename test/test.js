@@ -35,7 +35,7 @@ describe('live demo', () => {
   const chromeOptions = new chrome.Options();
   chromeOptions.addArguments('--remote-debugging-port=9225');
   if (!process.env.withwindow) {
-    chromeOptions.headless();
+    chromeOptions.addArguments("--headless");
   }
   let driver;
 
