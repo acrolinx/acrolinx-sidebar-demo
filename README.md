@@ -39,21 +39,21 @@ Before you start developing your own integration, you might benefit from looking
 
 ### Run Locally in a Web Browser
 
-1. Make sure, that you have installed NodeJS that includes npm.
-2. In your console navigate into the projects root folder and install all the required node modules with:
+1. Make sure that you have installed NodeJS that includes npm.
+2. In your console, navigate into the projects root folder and install all the required node modules with:
 
    ```bash
    npm install
    ```
 
-3. Now you can start the development server by typing:
+3. Now, you can start the development server by typing:
 
    ```bash
    npm start
    ```
 
-4. Now open [http://localhost:3000/samples](http://localhost:3000/samples) in your web-browser.
-5. Choose the sample, that you want to see. Use `https://partner-dev.internal.acrolinx.sh/` as the Acrolinx URL.
+4. Now, open [http://localhost:3000/samples](http://localhost:3000/samples) in your web-browser.
+5. Choose the sample that you want to see. Use `https://partner-dev.internal.acrolinx.sh/` as the Acrolinx URL.
 
    ![Screenshot of Example](doc/screenshot.png)
 
