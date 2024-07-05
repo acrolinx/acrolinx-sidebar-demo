@@ -30,7 +30,8 @@ import { AcrolinxPlugin, ContentEditableAdapter } from '@acrolinx/sidebar-sdk';
   // Use an existing adapter or create your own adapter using AdapterInterface
   const adapter = new ContentEditableAdapter({editorId: 'editor'});
 
-  // You can register several adapters, if you have multiple editors on the same page eg: CKEditor and TinyMCE on the same page
+  // You can register several adapters, if you have multiple editors on the same page 
+  // eg: multiple CKEditor or TinyMCE instances on the same page
   // using MultiAdapter module provided by the SDK
   plugin.registerAdapter(adapter);
 

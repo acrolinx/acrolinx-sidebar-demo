@@ -11,10 +11,10 @@ The sample uses
 
 Other development dependencies
 
-1. Node > 16
+1. Node > 18
 1. NPM
 1. Webpack 5
-1. TypeScript > 4
+1. TypeScript > 5
 1. Eslint
 1. Husky
 1. Prettier
