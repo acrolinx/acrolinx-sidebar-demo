@@ -5,6 +5,9 @@
   "author": "Acrolinx",
   "url": "https://www.acrolinx.com",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "browser-sync": "^3.0.2",
     "chromedriver": "^126.0.4",
