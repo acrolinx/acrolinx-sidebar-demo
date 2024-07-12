@@ -28,3 +28,20 @@ jobs:
       - run: npm ci
 
       - run: npm test
+
+  build-boilerplate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm --prefix samples/boilerplate ci
+
+      - run: npm --prefix samples/boilerplate test
