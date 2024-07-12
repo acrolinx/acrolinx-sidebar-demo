@@ -44,4 +44,4 @@ jobs:
 
       - run: npm --prefix samples/boilerplate ci
 
-      - run: npm --prefix samples/boilerplate build
+      - run: npm --prefix samples/boilerplate run build
