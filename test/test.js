@@ -34,6 +34,10 @@ describe('live demo', () => {
 
   const chromeOptions = new chrome.Options();
   chromeOptions.addArguments('--remote-debugging-port=9225');
+  if (process.env.CHROME_BIN_PATH) {
+    console.log(`Chrome Binary path: ${process.env.CHROME_BIN_PATH}`);
+    chromeOptions.setBinaryPath(process.env.CHROME_BIN_PATH);
+  }
   if (!process.env.withwindow) {
     chromeOptions.addArguments("--headless");
   }
