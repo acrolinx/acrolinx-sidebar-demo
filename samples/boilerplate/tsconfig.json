@@ -5,6 +5,6 @@
     "module": "ESNext",
     "target": "ESNext",
     "allowJs": false,
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "Bundler"
   }
 }
