@@ -29,6 +29,7 @@ jobs:
       - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
       - run: echo "CHROME_BIN_PATH=${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_ENV
       - run: echo "CHROMEDRIVER_BIN_PATH=${{ steps.setup-chrome.outputs.chromedriver-path }}" >> $GITHUB_ENV
+      - run: echo "CHROMEDRIVER_FILEPATH=${CHROMEDRIVER_BIN_PATH}" > .npmrc 
 
       - name: Setup node
         uses: actions/setup-node@v4
