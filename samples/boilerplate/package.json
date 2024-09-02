@@ -26,7 +26,7 @@
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.1.5",
-    "lint-staged": "^15.2.9",
+    "lint-staged": "^15.2.10",
     "mini-css-extract-plugin": "^2.9.1",
     "node-sass": "^9.0.0",
     "prettier": "^3.3.3",
