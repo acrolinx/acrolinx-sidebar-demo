@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Get started with Acrolinx Integrations",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
@@ -28,8 +28,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "mini-css-extract-plugin": "^2.9.2",
-    "node-sass": "^9.0.0",
     "prettier": "^3.5.3",
+    "sass-embedded": "^1.85.1",
     "sass-loader": "^16.0.5",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.0",
