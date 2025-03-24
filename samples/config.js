@@ -25,10 +25,10 @@
 var basicConf = {
   sidebarContainerId: 'sidebarContainer',
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
-  serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
+  serverAddress: 'https://nike-dev.acrolinx.cloud',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
-  clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5',
+  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjYyZTAyOTViLTcyNzAtNmI2Ny1jZDNkLTM3MDAxNDU1MDYyZiIsIm5hbWUiOiJMZXhpIChEZXYgT25seSkgU2lkZWJhciIsImlhdCI6MTY1ODg1NzgyN30.JiD2vl4t2Raf0fTQIQ_-k-3hl6Z7nlo4LrTcTpyhOP9LtQR6HjiNhSn8XuCoJagzfBTr4p8UsasKaAoywCh_nA',
 
   /**
    * This callback can be used to set the documentReference.
@@ -63,13 +63,13 @@ var basicConf = {
 
   //enableSingleSignOn: true, //see: https://github.com/acrolinx/acrolinx-proxy-sample
 
-  // clientComponents: [
-  //   {
-  //     id: 'com.acrolinx.sidebarexample',
-  //     name: 'Acrolinx Sidebar Example Client',
-  //     version: '1.2.3.999',
-  //     category: 'MAIN'
-  //   },
+ clientComponents: [
+    {
+      id: 'com.acrolinx.sidebarexample',
+      name: 'TAM Test Sidebar',
+      version: '1.5.23',
+      category: 'MAIN'
+    }]
   //   {
   //     id: 'com.acrolinx.somecms',
   //     name: 'My CMS',
