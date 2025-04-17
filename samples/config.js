@@ -28,7 +28,7 @@ var basicConf = {
   serverAddress: 'https://sub-zero-dev.acrolinx.cloud',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
-  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MDBjOWFkLTcyNzAtNmI2Ny00OTQ3LTA3MDAxNGMwYWQ1NyIsIm5hbWUiOiJTdWItWmVybyBEZXYgU2lkZWJhciIsImlhdCI6MTc0NDg4MjA5OH0.-_1o6-xYAgEOJE_un3ecvwvN3AziNosAok7FfPci6AQCZalpEzD6DdWVtw-NB9D_eF4vY3O5rorZrjUe-hY4Cw',
+  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MDBjOWFkLTcyNzAtNmI2Ny00OTQ3LTA3MDAxNGMwYWQ1NyIsIm5hbWUiOiJTdWItWmVybyBEZXYgU2lkZWJhciIsImlhdCI6MTc0NDg4MjA5OH0.-_1o6-xYAgEOJE_un3ecvwvN3AziNosAok7FfPci6AQCZalpEzD6DdWVtw-NB9D_eF4vY3O5rorZrjUe-hY4Cw; PoC v1.0.0',
 
   /**
    * This callback can be used to set the documentReference.
