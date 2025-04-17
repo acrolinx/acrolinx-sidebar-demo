@@ -25,10 +25,10 @@
 var basicConf = {
   sidebarContainerId: 'sidebarContainer',
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
-  serverAddress: 'https://nike-dev.acrolinx.cloud',
+  serverAddress: 'https://sub-zero-dev.acrolinx.cloud',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
-  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjYyZTAyOTViLTcyNzAtNmI2Ny1jZDNkLTM3MDAxNDU1MDYyZiIsIm5hbWUiOiJMZXhpIChEZXYgT25seSkgU2lkZWJhciIsImlhdCI6MTY1ODg1NzgyN30.JiD2vl4t2Raf0fTQIQ_-k-3hl6Z7nlo4LrTcTpyhOP9LtQR6HjiNhSn8XuCoJagzfBTr4p8UsasKaAoywCh_nA',
+  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MDBjOWFkLTcyNzAtNmI2Ny00OTQ3LTA3MDAxNGMwYWQ1NyIsIm5hbWUiOiJTdWItWmVybyBEZXYgU2lkZWJhciIsImlhdCI6MTc0NDg4MjA5OH0.-_1o6-xYAgEOJE_un3ecvwvN3AziNosAok7FfPci6AQCZalpEzD6DdWVtw-NB9D_eF4vY3O5rorZrjUe-hY4Cw',
 
   /**
    * This callback can be used to set the documentReference.
