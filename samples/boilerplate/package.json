@@ -28,7 +28,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "mini-css-extract-plugin": "^2.9.2",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.1",
     "sass-embedded": "^1.89.2",
     "sass-loader": "^16.0.5",
     "typescript": "^5.8.3",
