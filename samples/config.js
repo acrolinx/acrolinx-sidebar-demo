@@ -26,8 +26,8 @@ var basicConf = {
   sidebarContainerId: 'sidebarContainer',
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
   //serverAddress: 'https://amazon.acrolinx.cloud',
-  //serverAddress: 'https://amazon-dev.acrolinx.cloud',
-  serverAddress: 'https://playspace.acrolinx-cloud.net',
+  serverAddress: 'https://amazon-enterprise.acrolinx.cloud',
+  //serverAddress: 'https://playspace.acrolinx-cloud.net',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
   clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MTMyY2JlLTcyNzAtNmI2Ny0wMWI2LTc3MDAxNDExZDBlNyIsIm5hbWUiOiJBbWF6b24gQ2FyYm9uIERldiIsImlhdCI6MTc0NjA4NzI5OX0.zAQCeKgxguYp3qbOxKmBffOOeFJrghbBUnPsSQJ1fb3yqA6vVr_bdpXKt3VOSegv7C9zG3gtu5fRrJWMBc3jvQ; PoC v1.0.0',
