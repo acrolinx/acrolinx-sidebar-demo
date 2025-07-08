@@ -11,7 +11,7 @@
   "devDependencies": {
     "browser-sync": "^3.0.4",
     "chromedriver": "^138.0.1",
-    "dotenv": "^17.0.1",
+    "dotenv": "^17.1.0",
     "jest": "^30.0.4",
     "jest-junit": "^16.0.0",
     "selenium-webdriver": "^4.34.0"
