@@ -65,13 +65,11 @@ var basicConf = {
 
   //enableSingleSignOn: true, //see: https://github.com/acrolinx/acrolinx-proxy-sample
 
-//  clientComponents: [
-//     {
-//       id: 'com.acrolinx.sidebarexample',
-//       name: 'TAM Test Sidebar',
-//       version: '1.5.23',
-//       category: 'MAIN'
-//     }]
+ clientComponents: [
+    {
+      version: '1.5.23',
+      category: 'MAIN'
+    }]
   //   {
   //     id: 'com.acrolinx.somecms',
   //     name: 'My CMS',
