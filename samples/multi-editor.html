@@ -124,19 +124,26 @@
       // }
     });
 
-    multiAdapter.addSingleAdapter(contentEditableAdapter);
+    multiAdapter.addSingleAdapter(contentEditableAdapter, {
+      attributes: {
+        id: 'EditableDiv',
+        'class': 'content',
+        'div_name': 'plain_text_div_field'
+      }
+    },'CUSTOM_FIELD_ID_01');
 
     multiAdapter.addSingleAdapter(inputAdapter, {
       tagName: 'h1',
       attributes: {
-        'class': 'title',
-        'data-extra': false
+        id: 'title',
+        'class': 'content',
+        'div_name': 'plain_text_area'
       }
-    });
+    },'CUSTOM_FIELD_ID_02');
 
-    multiAdapter.addSingleAdapter(ckEditorAdapter);
-    multiAdapter.addSingleAdapter(tinyMceAdapter);
-    multiAdapter.addSingleAdapter(codeMirrorAdapter);
+    multiAdapter.addSingleAdapter(ckEditorAdapter, 'CUSTOM_FIELD_ID_03');
+    multiAdapter.addSingleAdapter(tinyMceAdapter, 'CUSTOM_FIELD_ID_04');
+    multiAdapter.addSingleAdapter(codeMirrorAdapter, 'CUSTOM_FIELD_ID_05');
 
     // Register multiAdapter to the main Acrolinx plugin
     acrolinxPlugin.registerAdapter(multiAdapter);
