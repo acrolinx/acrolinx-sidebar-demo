@@ -141,9 +141,9 @@
       }
     },'CUSTOM_FIELD_ID_02');
 
-    multiAdapter.addSingleAdapter(ckEditorAdapter, 'CUSTOM_FIELD_ID_03');
-    multiAdapter.addSingleAdapter(tinyMceAdapter, 'CUSTOM_FIELD_ID_04');
-    multiAdapter.addSingleAdapter(codeMirrorAdapter, 'CUSTOM_FIELD_ID_05');
+    multiAdapter.addSingleAdapter(ckEditorAdapter, {}, 'CUSTOM_FIELD_ID_03');
+    multiAdapter.addSingleAdapter(tinyMceAdapter, {}, 'CUSTOM_FIELD_ID_04');
+    multiAdapter.addSingleAdapter(codeMirrorAdapter, {}, 'CUSTOM_FIELD_ID_05');
 
     // Register multiAdapter to the main Acrolinx plugin
     acrolinxPlugin.registerAdapter(multiAdapter);
