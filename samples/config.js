@@ -30,7 +30,8 @@ var basicConf = {
   //serverAddress: 'https://playspace.acrolinx-cloud.net',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
-  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MTMyY2JlLTcyNzAtNmI2Ny0wMWI2LTc3MDAxNDExZDBlNyIsIm5hbWUiOiJBbWF6b24gQ2FyYm9uIERldiIsImlhdCI6MTc0NjA4NzI5OX0.zAQCeKgxguYp3qbOxKmBffOOeFJrghbBUnPsSQJ1fb3yqA6vVr_bdpXKt3VOSegv7C9zG3gtu5fRrJWMBc3jvQ; PoC v1.0.0',
+  //clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MTMyY2JlLTcyNzAtNmI2Ny0wMWI2LTc3MDAxNDExZDBlNyIsIm5hbWUiOiJBbWF6b24gQ2FyYm9uIERldiIsImlhdCI6MTc0NjA4NzI5OX0.zAQCeKgxguYp3qbOxKmBffOOeFJrghbBUnPsSQJ1fb3yqA6vVr_bdpXKt3VOSegv7C9zG3gtu5fRrJWMBc3jvQ; PoC v1.0.0', //DEV signature
+  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4OTI0NDkyLTcyNzAtNmI2Ny0wM2ZlLTllMDAxNGEzYmU1MSIsIm5hbWUiOiJBbWF6b24gQ2FyYm9uIFNpZGViYXIiLCJpYXQiOjE3NTQ0MjE4MjZ9.tx91Ce9wxnx_j_S7uI86dXzVwRzSMA_PnlypZgmB76Vhwas-GE1TZgQsLpM0vMSzhL2aMJFlZ_-BxhZL7P9ePg; PoC v1.0.0', //Prod signature
 
   /**
    * This callback can be used to set the documentReference.
