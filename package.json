@@ -12,7 +12,7 @@
     "browser-sync": "^3.0.4",
     "chromedriver": "^139.0.2",
     "dotenv": "^17.2.1",
-    "jest": "^30.1.0",
+    "jest": "^30.1.1",
     "jest-junit": "^16.0.0",
     "selenium-webdriver": "^4.35.0"
   },
