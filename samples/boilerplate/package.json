@@ -29,7 +29,7 @@
     "lint-staged": "^16.1.6",
     "mini-css-extract-plugin": "^2.9.4",
     "prettier": "^3.6.2",
-    "sass-embedded": "^1.92.0",
+    "sass-embedded": "^1.92.1",
     "sass-loader": "^16.0.5",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.42.0",
