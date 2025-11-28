@@ -38,7 +38,7 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
-    "@acrolinx/sidebar-sdk": "^1.1.14",
+    "@acrolinx/sidebar-sdk": "^2.0.2",
     "@babel/runtime": "^7.28.4",
     "normalize.css": "^8.0.1"
   },
