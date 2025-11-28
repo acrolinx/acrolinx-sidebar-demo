@@ -31,7 +31,7 @@
 if (window.acrolinxSidebar) {
   window.acrolinxSidebar.toggleVisibility();
 } else {
-  var script = document.createElement('script'); script.src = "https://unpkg.com/@acrolinx/sidebar-sdk/dist/acrolinx-sidebar-sdk.js";
+  var script = document.createElement('script'); script.src = "https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js";
   script.addEventListener('load', function () {
     window.acrolinxSidebar = new acrolinx.plugins.initFloatingSidebar({ asyncStorage: new acrolinx.plugins.AsyncLocalStorage() });
 
