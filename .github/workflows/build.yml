@@ -39,6 +39,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm test
+
   build-boilerplate:
     runs-on: ubuntu-latest
 
