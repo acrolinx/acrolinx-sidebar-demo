@@ -35,9 +35,9 @@ function initSelectedExample() {
 }
 
 function initAcrolinxPlugin() {
-  basicConf.checkSelection = true;
+  window.basicConf.checkSelection = true;
 
-  basicConf.getDocumentReference = function () {
+  window.basicConf.getDocumentReference = function () {
     if (isAutoExampleSelected()) {
       return documentReferenceInput.value.trim() || window.location.href;
     } else {
@@ -46,10 +46,10 @@ function initAcrolinxPlugin() {
   };
 
   // Create the main Acrolinx plugin.
-  var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
+  var acrolinxPlugin = new window.AcrolinxPlugin(window.basicConf);
 
   // Create an adapter for a text area.
-  var adapter = new acrolinx.plugins.adapter.CodeMirrorAdapter({editor: codeMirrorEditor});
+  var adapter = new window.CodeMirrorAdapter({editor: codeMirrorEditor});
 
   // Register the single adapter to the main Acrolinx plugin.
   acrolinxPlugin.registerAdapter(adapter);

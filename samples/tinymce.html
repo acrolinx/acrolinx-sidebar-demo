@@ -26,7 +26,7 @@ For more information visit: http://www.acrolinx.com
   <script src="https://cdn.rawgit.com/tinymce/tinymce-dist/4.2.5/tinymce.min.js"></script>
 </head>
 
-<body onload="initAcrolinx()">
+<body>
   <div id="sidebarContainer"></div>
 
   <div id="app" style="position: absolute;left:0px;right: 350px;">
@@ -40,14 +40,15 @@ For more information visit: http://www.acrolinx.com
 
   </div>
 
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <script src="config.js"></script>
 
-  <script>
+  <script type="module">
+    import { AcrolinxPlugin, TinyMCEAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
+
     function initAcrolinx() {
-      basicConf.checkSelection = true;
-      var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
-      var tinyMceAdapter = new acrolinx.plugins.adapter.TinyMCEAdapter({ editorId: 'editor_tinymce' });
+      window.basicConf.checkSelection = true;
+      const acrolinxPlugin = new AcrolinxPlugin(window.basicConf);
+      const tinyMceAdapter = new TinyMCEAdapter({ editorId: 'editor_tinymce' });
       acrolinxPlugin.registerAdapter(tinyMceAdapter);
       acrolinxPlugin.init();
     }
@@ -57,6 +58,11 @@ For more information visit: http://www.acrolinx.com
       height: 50
     });
 
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAcrolinx);
+    } else {
+      initAcrolinx();
+    }
   </script>
 </body>
 

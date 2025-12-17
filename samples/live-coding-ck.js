@@ -32,11 +32,12 @@
 if (window.acrolinxSidebar) {
   window.acrolinxSidebar.toggleVisibility();
 } else {
-  var script = document.createElement('script'); script.src = "https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js";
-  script.addEventListener('load', function () {
-    window.acrolinxSidebar = new acrolinx.plugins.initFloatingSidebar({ asyncStorage: new acrolinx.plugins.AsyncLocalStorage() });
+  import('https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js').then(function(module) {
+    const { initFloatingSidebar, AsyncLocalStorage, AcrolinxPlugin, CKEditor5Adapter } = module;
+    
+    window.acrolinxSidebar = initFloatingSidebar({ asyncStorage: new AsyncLocalStorage() });
 
-    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin({
+    const acrolinxPlugin = new AcrolinxPlugin({
       serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
       sidebarContainerId: 'acrolinxSidebarContainer',
       showServerSelector: false,
@@ -47,10 +48,8 @@ if (window.acrolinxSidebar) {
     });
 
     // Pass the html element id of the editor here.
-    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CKEditor5Adapter({ editorId: "snippet-balloon-editor" }));
+    acrolinxPlugin.registerAdapter(new CKEditor5Adapter({ editorId: "snippet-balloon-editor" }));
 
     acrolinxPlugin.init();
   });
-
-  document.head.appendChild(script);
 }

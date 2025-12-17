@@ -44,13 +44,14 @@
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
   crossorigin="anonymous"></script>
 
-<script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
 <script src="../config.js"></script>
 
-<script>
+<script type="module">
+  import { autoBindFloatingSidebar } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
+
   var floatingSidebar;
   window.addEventListener("load", function () {
-    floatingSidebar = acrolinx.plugins.autoBindFloatingSidebar(basicConf);
+    floatingSidebar = autoBindFloatingSidebar(window.basicConf);
   });
 
   $('#removeTextarea').click(function () {

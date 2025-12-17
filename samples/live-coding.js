@@ -32,11 +32,12 @@
 if (window.acrolinxSidebar) {
   window.acrolinxSidebar.toggleVisibility();
 } else {
-  var script = document.createElement('script'); script.src = "https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js";
-  script.addEventListener('load', function () {
-    window.acrolinxSidebar = new acrolinx.plugins.initFloatingSidebar({ asyncStorage: new acrolinx.plugins.AsyncLocalStorage() });
+  import('https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js').then(function(module) {
+    const { initFloatingSidebar, AsyncLocalStorage, AcrolinxPlugin, CodeMirror6Adapter } = module;
+    
+    window.acrolinxSidebar = initFloatingSidebar({ asyncStorage: new AsyncLocalStorage() });
 
-    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin({
+    const acrolinxPlugin = new AcrolinxPlugin({
       serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
       sidebarContainerId: 'acrolinxSidebarContainer',
       showServerSelector: false,
@@ -47,10 +48,8 @@ if (window.acrolinxSidebar) {
     });
 
     // Pass object of EditorView type here. view is already created on page load by codemirror.net
-    acrolinxPlugin.registerAdapter(new acrolinx.plugins.adapter.CodeMirror6Adapter({ editor: view}));
+    acrolinxPlugin.registerAdapter(new CodeMirror6Adapter({ editor: view}));
 
     acrolinxPlugin.init();
   });
-
-  document.head.appendChild(script);
 }
