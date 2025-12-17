@@ -75,7 +75,7 @@ describe('live demo', () => {
     const sdkVersion = await (await getWaiting(sdkVersionLocator)).getText();
 
     const versionParts = sdkVersion.split('.');
-    expect(versionParts.length).toEqual(4);
+    expect(versionParts.length).toEqual(3);
     versionParts.forEach((versionPart) => {
       expect(versionPart).toMatch(/\d+/);
     });
