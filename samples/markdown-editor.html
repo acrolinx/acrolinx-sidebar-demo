@@ -25,7 +25,7 @@ For more information visit: https://www.acrolinx.com
   <link rel="stylesheet" href="style.css" />
 </head>
 
-<body onload="initAcrolinx()">
+<body>
   <div id="sidebarContainer"></div>
 
   <div id="app">
@@ -48,18 +48,17 @@ This textt has more then a errorr.
 
   </div>
 
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <script src="config.js"></script>
 
+  <script type="module">
+    import { AcrolinxPlugin, InputAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
 
-  <script>
     function initAcrolinx() {
-
       // Create the main Acrolinx plugin.
-      var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
+      const acrolinxPlugin = new AcrolinxPlugin(window.basicConf);
 
       // Create an adapter for a text area.
-      var adapter = new acrolinx.plugins.adapter.InputAdapter({ editorId: 'editor', format: 'MARKDOWN' });
+      const adapter = new InputAdapter({ editorId: 'editor', format: 'MARKDOWN' });
 
       // Register the single adapter to the main Acrolinx plugin.
       acrolinxPlugin.registerAdapter(adapter);
@@ -67,6 +66,11 @@ This textt has more then a errorr.
       acrolinxPlugin.init();
     }
 
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAcrolinx);
+    } else {
+      initAcrolinx();
+    }
   </script>
 </body>
 

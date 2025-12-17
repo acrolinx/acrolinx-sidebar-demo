@@ -6,16 +6,17 @@
 </head>
 <body>
 
-<script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
-
 <div id="app">
   <div class="showbox">
     <img class="spinner" alt="">
   </div>
 </div>
-<script>
-  var acrolinxPlugin = acrolinx.plugins.createPluginMessageAdapter();
-  acrolinx.plugins.loadSidebarCode();
+
+<script type="module">
+  import { createPluginMessageAdapter, loadSidebarCode } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
+
+  const acrolinxPlugin = createPluginMessageAdapter();
+  loadSidebarCode();
 </script>
 
 </body>

@@ -22,7 +22,8 @@
 
 'use strict';
 
-var basicConf = {
+// Make basicConf available globally
+window.basicConf = {
   sidebarContainerId: 'sidebarContainer',
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
   serverAddress: 'https://partner-dev.internal.acrolinx.sh/',

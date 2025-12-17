@@ -25,7 +25,7 @@ For more information visit: https://www.acrolinx.com
   <link rel="stylesheet" href="style.css" />
 </head>
 
-<body onload="initAcrolinx()">
+<body>
   <div id="sidebarContainer"></div>
 
   <div id="app">
@@ -39,19 +39,21 @@ For more information visit: https://www.acrolinx.com
 
   </div>
 
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <script src="config.js"></script>
 
+  <!-- Version 2.0.2+ uses ES modules, so we need type="module" -->
+  <script type="module">
+    // Import the required classes from the ES module
+    import { AcrolinxPlugin, ContentEditableAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
 
-  <script>
+    // Wait for DOM to be ready
     function initAcrolinx() {
-
+      // Access basicConf from global scope (defined in config.js)
       // Create the main Acrolinx plugin.
-      var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
+      const acrolinxPlugin = new AcrolinxPlugin(window.basicConf);
 
       // Create an adapter for an editable div.
-      // Alternative: new acrolinx.plugins.adapter.ContentEditableAdapter({element: document.getElementById('editor')})
-      var adapter = new acrolinx.plugins.adapter.ContentEditableAdapter({ editorId: 'editor' });
+      const adapter = new ContentEditableAdapter({ editorId: 'editor' });
 
       // Register the single adapter to the main Acrolinx plugin.
       acrolinxPlugin.registerAdapter(adapter);
@@ -59,6 +61,12 @@ For more information visit: https://www.acrolinx.com
       acrolinxPlugin.init();
     }
 
+    // Call initAcrolinx when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAcrolinx);
+    } else {
+      initAcrolinx();
+    }
   </script>
 </body>
 

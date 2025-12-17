@@ -49,11 +49,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.js"></script>  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/xml/xml.js"></script>
 
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <link rel="stylesheet" href="style.css"/>
 </head>
 
-<body onload="initAcrolinx()">
+<body>
 <div id="sidebarContainer"></div>
 <div id="app" style="width: 800px">
   <h1>Acrolinx Sidebar Multi-Editor Example</h1>
@@ -98,22 +97,26 @@
     lineNumbers: true,
     mode: 'text/html'
   });
+</script>
+
+<script type="module">
+  import { AcrolinxPlugin, ContentEditableAdapter, InputAdapter, CKEditor5Adapter, TinyMCEAdapter, CodeMirrorAdapter, MultiEditorAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
 
   function initAcrolinx() {
     // Create the main Acrolinx plugin.
-    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
+    const acrolinxPlugin = new AcrolinxPlugin(window.basicConf);
 
-    // Alternative: new acrolinx.plugins.adapter.ContentEditableAdapter({element: document.getElementById('EditableDiv')});
-    var contentEditableAdapter = new acrolinx.plugins.adapter.ContentEditableAdapter({editorId: 'EditableDiv'});
+    // Alternative: new ContentEditableAdapter({element: document.getElementById('EditableDiv')});
+    const contentEditableAdapter = new ContentEditableAdapter({editorId: 'EditableDiv'});
 
-    // Alternative: new acrolinx.plugins.adapter.InputAdapter({element: document.getElementById('textarea')});
-    var inputAdapter = new acrolinx.plugins.adapter.InputAdapter({editorId: 'textarea'});
+    // Alternative: new InputAdapter({element: document.getElementById('textarea')});
+    const inputAdapter = new InputAdapter({editorId: 'textarea'});
 
-    var ckEditorAdapter = new acrolinx.plugins.adapter.CKEditor5Adapter({editorId: 'editor_ck'});
-    var tinyMceAdapter = new acrolinx.plugins.adapter.TinyMCEAdapter({editorId: 'editor_tinymce'});
-    var codeMirrorAdapter = new acrolinx.plugins.adapter.CodeMirrorAdapter({editor: codeMirrorEditor});
+    const ckEditorAdapter = new CKEditor5Adapter({editorId: 'editor_ck'});
+    const tinyMceAdapter = new TinyMCEAdapter({editorId: 'editor_tinymce'});
+    const codeMirrorAdapter = new CodeMirrorAdapter({editor: window.codeMirrorEditor});
 
-    var multiAdapter = new acrolinx.plugins.adapter.MultiEditorAdapter({
+    const multiAdapter = new MultiEditorAdapter({
       // Optional: Can be used to set the DOCTYPE
       // documentHeader: '<!DOCTYPE html>\n',
       // Optional: Wrapper around the complete concatenated html
@@ -149,6 +152,12 @@
     acrolinxPlugin.registerAdapter(multiAdapter);
 
     acrolinxPlugin.init();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAcrolinx);
+  } else {
+    initAcrolinx();
   }
 </script>
 

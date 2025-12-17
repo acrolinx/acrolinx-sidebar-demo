@@ -8,7 +8,6 @@
 
   <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
 
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <link rel="stylesheet" href="../../style.css"/>
 
   <style>
@@ -24,7 +23,7 @@
 
   </script>
 </head>
-<body onload="initAcrolinx()">
+<body>
 <div id="sidebarContainer"></div>
 <div id="app" style="width: 800px">
   <h1>Acrolinx - Scroll Into View - Test Page</h1>
@@ -81,9 +80,8 @@
 </div>
 
 <script src="../config.js"></script>
-<script type="text/javascript">
-  'use strict';
-
+<script type="module">
+  import { AcrolinxPlugin, ContentEditableAdapter, InputAdapter, CKEditorAdapter, TinyMCEAdapter, MultiEditorAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
 
   function initAcrolinx() {
 
@@ -92,18 +90,18 @@
     }
 
     //Init the main Acrolinx Plugin
-    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin(basicConf);
+    const acrolinxPlugin = new AcrolinxPlugin(window.basicConf);
 
     //A simple Adapter for a Editable Div
-    var contentEditableAdapter = new acrolinx.plugins.adapter.ContentEditableAdapter(addScrollOffset({editorId: 'EditableDiv'}));
-    var inputAdapter = new acrolinx.plugins.adapter.InputAdapter(addScrollOffset({editorId: 'textarea'}));
-    var ckEditorAdapter = new acrolinx.plugins.adapter.CKEditorAdapter(addScrollOffset({editorId: 'editor_ck'}));
-    var tinyMceAdapter = new acrolinx.plugins.adapter.TinyMCEAdapter(addScrollOffset({editorId: 'editor_tinymce'}));
+    const contentEditableAdapter = new ContentEditableAdapter(addScrollOffset({editorId: 'EditableDiv'}));
+    const inputAdapter = new InputAdapter(addScrollOffset({editorId: 'textarea'}));
+    const ckEditorAdapter = new CKEditorAdapter(addScrollOffset({editorId: 'editor_ck'}));
+    const tinyMceAdapter = new TinyMCEAdapter(addScrollOffset({editorId: 'editor_tinymce'}));
 
-    var contentEditableAdapter2 = new acrolinx.plugins.adapter.ContentEditableAdapter(addScrollOffset({editorId: 'EditableDiv2'}));
-    var inputAdapter2 = new acrolinx.plugins.adapter.InputAdapter(addScrollOffset({editorId: 'textarea2'}));
+    const contentEditableAdapter2 = new ContentEditableAdapter(addScrollOffset({editorId: 'EditableDiv2'}));
+    const inputAdapter2 = new InputAdapter(addScrollOffset({editorId: 'textarea2'}));
 
-    var multiAdapter = new acrolinx.plugins.adapter.MultiEditorAdapter();
+    const multiAdapter = new MultiEditorAdapter();
     multiAdapter.addSingleAdapter(contentEditableAdapter);
     multiAdapter.addSingleAdapter(inputAdapter);
     multiAdapter.addSingleAdapter(ckEditorAdapter);
@@ -134,6 +132,12 @@
       });
     }
 
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAcrolinx);
+  } else {
+    initAcrolinx();
   }
 
 </script>

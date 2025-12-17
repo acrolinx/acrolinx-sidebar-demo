@@ -34,16 +34,16 @@ For more information visit: https://www.acrolinx.com
 
 
   <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <script src="../config.js"></script>
 
+  <script type="module">
+    import { AcrolinxPlugin, InputAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
 
-  <script>
-    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin($.extend({}, basicConf, {
+    const acrolinxPlugin = new AcrolinxPlugin($.extend({}, window.basicConf, {
       useMessageAdapter: true,
       sidebarUrl: './sidebar-iframe/'
     }));
-    var inputAdapter = new acrolinx.plugins.adapter.InputAdapter({ editorId: 'editor' });
+    const inputAdapter = new InputAdapter({ editorId: 'editor' });
     acrolinxPlugin.registerAdapter(inputAdapter);
     acrolinxPlugin.init();
   </script>

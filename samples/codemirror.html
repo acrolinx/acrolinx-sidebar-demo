@@ -72,11 +72,16 @@ For more information visit: https://www.acrolinx.com
 
   </div>
 
-
-  <script src="https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js"></script>
   <script src="config.js"></script>
 
   <!--<script src="codemirror-example-data.js"></script>-->
+  <script type="module">
+    import { AcrolinxPlugin, CodeMirrorAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
+    
+    // Make SDK available globally for codemirror.js
+    window.AcrolinxPlugin = AcrolinxPlugin;
+    window.CodeMirrorAdapter = CodeMirrorAdapter;
+  </script>
   <script src="codemirror.js"></script>
 
 </body>

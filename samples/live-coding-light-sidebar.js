@@ -31,11 +31,13 @@
 if (window.acrolinxSidebar) {
   window.acrolinxSidebar.toggleVisibility();
 } else {
-  var script = document.createElement('script'); script.src = "https://unpkg.com/@acrolinx/sidebar-sdk@1.1.14/dist/acrolinx-sidebar-sdk.js";
-  script.addEventListener('load', function () {
-    window.acrolinxSidebar = new acrolinx.plugins.initFloatingSidebar({ asyncStorage: new acrolinx.plugins.AsyncLocalStorage() });
+  // Dynamic ES module import for v2.0.2
+  import('https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js').then(function(module) {
+    const { initFloatingSidebar, AsyncLocalStorage, AcrolinxPlugin, AbstractRichtextEditorAdapter } = module;
+    
+    window.acrolinxSidebar = initFloatingSidebar({ asyncStorage: new AsyncLocalStorage() });
 
-    var acrolinxPlugin = new acrolinx.plugins.AcrolinxPlugin({
+    const acrolinxPlugin = new AcrolinxPlugin({
       serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
       sidebarContainerId: 'acrolinxSidebarContainer',
       showServerSelector: false,
@@ -50,7 +52,7 @@ if (window.acrolinxSidebar) {
     var plainAdapter = function() {
       // This is intentional
     };
-    plainAdapter.prototype = _.extend(new acrolinx.plugins.adapter.AbstractRichtextEditorAdapter(), {
+    plainAdapter.prototype = _.extend(new AbstractRichtextEditorAdapter(), {
       extractContentForCheck: function() {
         return {content:$('html').html()};
       },
@@ -62,6 +64,4 @@ if (window.acrolinxSidebar) {
 
     acrolinxPlugin.init();
   });
-
-  document.head.appendChild(script);
 }
