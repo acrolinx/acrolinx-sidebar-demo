@@ -32,7 +32,6 @@
 if (window.acrolinxSidebar) {
   window.acrolinxSidebar.toggleVisibility();
 } else {
-  // Dynamic ES module import for v2.0.2
   import('https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js').then(function(module) {
     const { initFloatingSidebar, AsyncLocalStorage, AcrolinxPlugin, CKEditor5Adapter } = module;
     
