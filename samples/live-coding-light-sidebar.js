@@ -51,7 +51,7 @@ if (window.acrolinxSidebar) {
     var plainAdapter = function() {
       // This is intentional
     };
-    plainAdapter.prototype = _.extend(new AbstractRichtextEditorAdapter(), {
+    plainAdapter.prototype = Object.assign(new AbstractRichtextEditorAdapter(), {
       extractContentForCheck: function() {
         return {content:$('html').html()};
       },
