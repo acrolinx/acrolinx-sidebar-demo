@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<!--
+Copyright 2015 Acrolinx GmbH
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+For more information visit: https://www.acrolinx.com
+-->
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Acrolinx Sidebar SSO Example</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .sso-status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .sso-status.pending {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+    }
+    .sso-status.success {
+      background-color: #d4edda;
+      border: 1px solid #28a745;
+    }
+    .sso-status.error {
+      background-color: #f8d7da;
+      border: 1px solid #dc3545;
+    }
+    .sso-controls {
+      margin: 10px 0;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    .sso-controls input {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+    }
+    .sso-controls button {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .sso-controls button:hover {
+      background-color: #0056b3;
+    }
+    .sso-controls button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .credential-section {
+      margin: 10px 0;
+    }
+    .credential-section label {
+      display: inline-block;
+      width: 120px;
+      font-weight: bold;
+    }
+    
+    /* Layout fix: prevent content from overlapping with sidebar */
+    #app {
+      margin-right: 320px; /* 300px sidebar + 20px gap */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sidebarContainer"></div>
+
+  <div id="app">
+    <h1>Acrolinx Sidebar SSO Example</h1>
+
+    <p>
+      <a href="index.html">Other Examples</a> | <a href="https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx" target="_blank">Build With Acrolinx</a>
+    </p>
+
+    <div class="sso-controls">
+      <h3>SSO Authentication (Reverse Proxy Method)</h3>
+      
+      <!-- Mode Selector -->
+      <div class="mode-selector" style="margin-bottom: 15px; padding: 10px; background: #e9ecef; border-radius: 4px;">
+        <strong>Authentication Mode:</strong>
+        <ul style="list-style: none; margin: 10px 0 0 0; padding: 0;">
+          <li style="margin: 8px 0;">
+            <label style="cursor: pointer; display: flex; align-items: center;">
+              <input type="radio" name="ssoMode" value="demo" checked onchange="switchMode('demo')" style="width: auto; margin-right: 8px;">
+              <span style="color: #dc3545; font-weight: bold; margin-right: 8px;">DEMO</span>
+              <span style="font-size: 0.9em; color: #666;">- Direct browser requests (credentials visible in DevTools)</span>
+            </label>
+          </li>
+          <li style="margin: 8px 0;">
+            <label style="cursor: pointer; display: flex; align-items: center;">
+              <input type="radio" name="ssoMode" value="proxy" onchange="switchMode('proxy')" style="width: auto; margin-right: 8px;">
+              <span style="color: #28a745; font-weight: bold; margin-right: 8px;">PROXY</span>
+              <span style="font-size: 0.9em; color: #666;">- Backend server (credentials hidden, requires <code style="background:#eee;padding:1px 4px;border-radius:2px;">node samples/sso-proxy-server.js</code>)</span>
+            </label>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Mode Info Box -->
+      <div id="modeInfo" class="mode-info" style="margin-bottom: 15px; padding: 10px; border-radius: 4px; font-size: 0.9em;">
+        <!-- Populated by JavaScript -->
+      </div>
+      
+      <div class="credential-section">
+        <label for="ssoServer">Server:</label>
+        <input type="text" id="ssoServer" value="" placeholder="https://your-server.acrolinx-cloud.net" />
+      </div>
+      
+      <div class="credential-section">
+        <label for="ssoUsername">Username:</label>
+        <input type="text" id="ssoUsername" value="" placeholder="your-username" />
+      </div>
+      
+      <div class="credential-section" id="passwordSection">
+        <label for="ssoPassword">Password:</label>
+        <input type="password" id="ssoPassword" value="" placeholder="SSO Secret/Password (DEMO mode only)" />
+      </div>
+      
+      <div>
+        <button id="btnAuthenticate" onclick="performSSOAuth()">Authenticate via SSO</button>
+        <button id="btnClearAuth" onclick="clearAuthentication()">Clear Auth</button>
+        <button id="btnShowToken" onclick="showCurrentToken()">Show Token Info</button>
+        <button id="btnForceReset" onclick="forceFullReset()" style="background-color: #dc3545;">Force Full Reset</button>
+      </div>
+      
+      <div id="ssoStatus" class="sso-status pending">
+        Status: Not authenticated. Click "Authenticate via SSO" to begin.
+      </div>
+    </div>
+
+    <div id="editor" contenteditable="true" spellcheck="false">This textt has more then a <b>errorr</b>.</div>
+
+  </div>
+
+  <script src="config.js"></script>
+  <script src="sso-config.js"></script>
+
+  <script type="module">
+    import { AcrolinxPlugin, ContentEditableAdapter } from 'https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js';
+
+    let acrolinxPlugin = null;
+    let currentMode = 'demo';
+
+    // Update SSO status display
+    function updateStatus(message, type) {
+      const statusEl = document.getElementById('ssoStatus');
+      statusEl.textContent = message;
+      statusEl.className = 'sso-status ' + type;
+    }
+    
+    // Update mode info display
+    function updateModeInfo(mode) {
+      const modeInfoEl = document.getElementById('modeInfo');
+      const passwordSection = document.getElementById('passwordSection');
+      
+      if (mode === 'demo') {
+        modeInfoEl.innerHTML = `
+          <strong style="color: #dc3545;">[DEMO MODE]</strong> Direct browser authentication.<br>
+          <span style="color: #856404;">[WARNING] SSO credentials are visible in browser DevTools (Network tab).</span><br>
+          <span>This mode is for quick testing only. Not suitable for production.</span>
+        `;
+        modeInfoEl.style.background = '#fff3cd';
+        modeInfoEl.style.border = '1px solid #ffc107';
+        passwordSection.style.display = 'block';
+      } else {
+        modeInfoEl.innerHTML = `
+          <strong style="color: #28a745;">[PROXY MODE]</strong> Backend server authentication.<br>
+          <span style="color: #155724;">[SECURE] SSO credentials stay hidden on the server.</span><br>
+          <span><strong>Requires:</strong> Run <code style="background:#333;color:#0f0;padding:2px 6px;border-radius:3px;">node samples/sso-proxy-server.js</code> in a separate terminal.</span>
+        `;
+        modeInfoEl.style.background = '#d4edda';
+        modeInfoEl.style.border = '1px solid #28a745';
+        passwordSection.style.display = 'none';
+      }
+    }
+    
+    // Switch authentication mode
+    function switchMode(mode) {
+      currentMode = mode;
+      window.ssoConfig.setMode(mode);
+      updateModeInfo(mode);
+      console.log('[SSO Demo] Switched to mode:', mode.toUpperCase());
+      
+      if (mode === 'proxy') {
+        updateStatus('Mode: PROXY. Make sure proxy server is running, then click "Authenticate via SSO".', 'pending');
+      } else {
+        updateStatus('Mode: DEMO. Enter credentials and click "Authenticate via SSO".', 'pending');
+      }
+    }
+
+    // Flag to prevent duplicate requests (e.g., from BrowserSync syncing multiple browsers)
+    let authRequestInProgress = false;
+
+    // Perform SSO authentication
+    async function performSSOAuth() {
+      // Prevent duplicate requests
+      if (authRequestInProgress) {
+        console.log('[SSO Demo] Request already in progress, ignoring duplicate');
+        return;
+      }
+      authRequestInProgress = true;
+      
+      const btnAuth = document.getElementById('btnAuthenticate');
+      btnAuth.disabled = true;
+      
+      const modeLabel = currentMode.toUpperCase();
+      updateStatus(`Authenticating via ${modeLabel} mode...`, 'pending');
+      
+      try {
+        const username = document.getElementById('ssoUsername').value;
+        
+        // Validate username (required for both modes)
+        if (!username || username.trim() === '') {
+          throw new Error('Username is required. Please enter the username.');
+        }
+        
+        // Build options based on mode
+        const options = {
+          mode: currentMode,
+          serverAddress: document.getElementById('ssoServer').value,
+          username: username
+        };
+        
+        // Password is only needed in demo mode
+        if (currentMode === 'demo') {
+          const password = document.getElementById('ssoPassword').value;
+          if (!password || password.trim() === '') {
+            throw new Error('SSO password/secret is required in DEMO mode. Please enter the password.');
+          }
+          options.password = password;
+        }
+        
+        console.log('[SSO Demo] Attempting authentication:', {
+          mode: currentMode,
+          serverAddress: options.serverAddress,
+          username: options.username,
+          hasPassword: currentMode === 'demo' ? !!options.password : 'N/A (proxy mode)'
+        });
+        
+        const authData = await window.AcrolinxSSOService.authenticate(options);
+        console.log('[SSO Demo] Auth response:', authData);
+        
+        // Extract the access token
+        let accessToken = null;
+        if (authData.data && authData.data.accessToken) {
+          accessToken = authData.data.accessToken;
+        } else if (authData.accessToken) {
+          accessToken = authData.accessToken;
+        }
+        
+        if (accessToken) {
+          // Cache the token
+          sessionStorage.setItem('acrolinx_access_token', accessToken);
+          sessionStorage.setItem('acrolinx_token_expiry', (Date.now() + 3300000).toString());
+          
+          updateStatus(`[SUCCESS] [${modeLabel}] Authentication successful! Token received (${accessToken.substring(0, 20)}...)`, 'success');
+          
+          // Initialize sidebar with the access token
+          initAcrolinxWithToken(accessToken, options.serverAddress);
+        } else {
+          updateStatus(`[ERROR] [${modeLabel}] No access token in response: ` + JSON.stringify(authData), 'error');
+        }
+      } catch (error) {
+        console.error('[SSO Demo] Auth error:', error);
+        
+        // Clear any stale SSO token on authentication failure
+        sessionStorage.removeItem('acrolinx_access_token');
+        sessionStorage.removeItem('acrolinx_token_expiry');
+        
+        updateStatus('[ERROR] Authentication failed: ' + error.message + '\n\nIf the sidebar still shows "CHECK", click "Force Full Reset" to clear the cached session.', 'error');
+      } finally {
+        btnAuth.disabled = false;
+        authRequestInProgress = false;
+      }
+    }
+
+    // Clear authentication (including sidebar's own session)
+    function clearAuthentication() {
+      // Clear both our cache AND the sidebar's localStorage session
+      window.AcrolinxSSOService.clearAuth(true);
+      
+      // Clear the sidebar container to force re-initialization
+      const sidebarContainer = document.getElementById('sidebarContainer');
+      if (sidebarContainer) {
+        sidebarContainer.innerHTML = '';
+      }
+      
+      updateStatus('[CLEARED] All authentication cleared (SSO token + sidebar session). Reload the page to start fresh, then use "Authenticate via SSO" to login.', 'pending');
+      
+      // Note: The sidebar's iframe might still have some state. 
+      // For a complete reset, the page should be reloaded.
+      console.log('[SSO Demo] Authentication cleared. Recommend page reload for complete reset.');
+    }
+
+    // Show current token info
+    function showCurrentToken() {
+      const token = sessionStorage.getItem('acrolinx_access_token');
+      const expiry = sessionStorage.getItem('acrolinx_token_expiry');
+      
+      if (token && expiry) {
+        const expiryDate = new Date(parseInt(expiry, 10));
+        const isValid = Date.now() < parseInt(expiry, 10);
+        const status = isValid ? 'VALID' : 'EXPIRED';
+        
+        updateStatus(
+          `[${status}] Token: ${token.substring(0, 30)}...\nExpires: ${expiryDate.toLocaleString()}`,
+          isValid ? 'success' : 'error'
+        );
+      } else {
+        updateStatus('No token stored. Please authenticate first.', 'pending');
+      }
+    }
+
+    // Initialize Acrolinx Sidebar with the SSO token
+    function initAcrolinxWithToken(accessToken, serverAddress) {
+      console.log('[SSO Demo] Initializing Acrolinx Sidebar with SSO token');
+      console.log('[SSO Demo] Access Token:', accessToken ? accessToken.substring(0, 30) + '...' : 'none');
+      console.log('[SSO Demo] Server Address:', serverAddress);
+      
+      // Use clientSignature from ssoConfig (which gets it from proxy) or fallback to basicConf
+      const clientSig = window.ssoConfig.clientSignature || window.basicConf.clientSignature;
+      
+      // Create config with SSO token
+      // [IMPORTANT] Per Acrolinx documentation (sidebar-interface InitParameters):
+      // - accessToken: The sidebar tries to sign in the user with this optional accessToken
+      // - showServerSelector MUST be false for accessToken to work
+      // - Available since sidebar version 14.11.0
+      const ssoConf = {
+        ...window.basicConf,
+        serverAddress: serverAddress || window.basicConf.serverAddress,
+        clientSignature: clientSig,
+        // [CRITICAL] showServerSelector MUST be false for accessToken to be used
+        showServerSelector: false,
+        // Pass the access token directly as a property (not via a function)
+        accessToken: accessToken
+      };
+      
+      console.log('[SSO Demo] Configuration:', {
+        serverAddress: ssoConf.serverAddress,
+        clientSignature: ssoConf.clientSignature,
+        showServerSelector: ssoConf.showServerSelector,
+        hasAccessToken: !!ssoConf.accessToken,
+        sidebarContainerId: ssoConf.sidebarContainerId
+      });
+      
+      // Clear any existing sidebar content before re-initializing
+      const sidebarContainer = document.getElementById('sidebarContainer');
+      if (sidebarContainer) {
+        sidebarContainer.innerHTML = '';
+      }
+      
+      acrolinxPlugin = new AcrolinxPlugin(ssoConf);
+      
+      const adapter = new ContentEditableAdapter({ editorId: 'editor' });
+      acrolinxPlugin.registerAdapter(adapter);
+      
+      acrolinxPlugin.init();
+      
+      console.log('[SSO Demo] Sidebar initialized with SSO configuration');
+    }
+
+    // Initialize sidebar - SSO-only mode
+    // This demo ONLY uses SSO authentication, not the sidebar's built-in sign-in
+    function initAcrolinxStandard() {
+      // Check if we have a valid SSO token cached
+      if (window.AcrolinxSSOService.isAuthenticated()) {
+        const token = sessionStorage.getItem('acrolinx_access_token');
+        updateStatus('[SUCCESS] Found cached SSO token. Initializing sidebar with token...', 'success');
+        // Initialize with the cached SSO token
+        initAcrolinxWithToken(token, document.getElementById('ssoServer').value);
+        return;
+      }
+      
+      // No SSO token - check if sidebar has its own cached session
+      const hasSidebarCache = checkSidebarCache();
+      
+      if (hasSidebarCache) {
+        updateStatus('[WARNING] Old sidebar session found. Click "Force Full Reset" to clear it, then authenticate via SSO.', 'error');
+        // Initialize to show the cached state, but warn the user
+        initSidebarWithoutToken();
+        return;
+      }
+      
+      // No SSO token, no sidebar cache
+      // In DEMO mode: Don't show sidebar until user authenticates (needs password)
+      // In PROXY mode: Don't show sidebar until user authenticates (password on server)
+      if (currentMode === 'demo') {
+        updateStatus('DEMO Mode: Enter password and click "Authenticate via SSO" to login. Sidebar will appear after authentication.', 'pending');
+        console.log('[SSO Demo] DEMO mode - waiting for user to enter password and authenticate');
+        // Don't initialize sidebar - wait for user to authenticate
+        hideSidebar();
+      } else {
+        updateStatus('PROXY Mode: Click "Authenticate via SSO" to login. Sidebar will appear after authentication.', 'pending');
+        console.log('[SSO Demo] PROXY mode - waiting for user to authenticate');
+        // Don't initialize sidebar - wait for user to authenticate
+        hideSidebar();
+      }
+    }
+    
+    // Hide/clear the sidebar container
+    function hideSidebar() {
+      const sidebarContainer = document.getElementById('sidebarContainer');
+      if (sidebarContainer) {
+        sidebarContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #666; background: #f5f5f5; height: 100%; display: flex; align-items: center; justify-content: center;"><p>Sidebar will appear after SSO authentication.<br><br>Click "Authenticate via SSO" to begin.</p></div>';
+      }
+    }
+    
+    // Check if sidebar has cached session in localStorage
+    function checkSidebarCache() {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.toLowerCase().includes('acrolinx') || key.includes('sidebar'))) {
+          console.log('[SSO Demo] Found sidebar cache key:', key);
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    // Initialize sidebar without SSO token (will show sign-in or use cached session)
+    function initSidebarWithoutToken() {
+      console.log('[SSO Demo] Initializing sidebar without SSO token');
+      
+      // Use server and clientSignature from form/ssoConfig, not basicConf
+      const serverFromForm = document.getElementById('ssoServer').value;
+      const clientSig = window.ssoConfig.clientSignature || window.basicConf.clientSignature;
+      
+      const standardConf = {
+        ...window.basicConf,
+        serverAddress: serverFromForm || window.basicConf.serverAddress,
+        clientSignature: clientSig,
+        showServerSelector: false // Don't show server selector in SSO demo
+        // No accessToken - sidebar will show sign-in or use its cached session
+      };
+      
+      console.log('[SSO Demo] Sidebar config:', { 
+        serverAddress: standardConf.serverAddress,
+        clientSignature: standardConf.clientSignature 
+      });
+      
+      // Clear any existing sidebar content
+      const sidebarContainer = document.getElementById('sidebarContainer');
+      if (sidebarContainer) {
+        sidebarContainer.innerHTML = '';
+      }
+      
+      acrolinxPlugin = new AcrolinxPlugin(standardConf);
+      const adapter = new ContentEditableAdapter({ editorId: 'editor' });
+      acrolinxPlugin.registerAdapter(adapter);
+      acrolinxPlugin.init();
+    }
+
+    // Force full reset - clears all caches and reloads the page
+    function forceFullReset() {
+      console.log('[SSO Demo] Forcing full reset...');
+      
+      // Clear our SSO cache
+      sessionStorage.removeItem('acrolinx_access_token');
+      sessionStorage.removeItem('acrolinx_token_expiry');
+      
+      // Clear ALL Acrolinx-related localStorage items
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.toLowerCase().includes('acrolinx') || key.includes('sidebar'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => {
+        console.log('[SSO Demo] Removing localStorage key:', key);
+        localStorage.removeItem(key);
+      });
+      
+      // Also clear sessionStorage items that might be sidebar-related
+      const sessionKeysToRemove = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && (key.toLowerCase().includes('acrolinx') || key.includes('sidebar'))) {
+          sessionKeysToRemove.push(key);
+        }
+      }
+      sessionKeysToRemove.forEach(key => {
+        console.log('[SSO Demo] Removing sessionStorage key:', key);
+        sessionStorage.removeItem(key);
+      });
+      
+      console.log('[SSO Demo] Cleared ' + keysToRemove.length + ' localStorage items and ' + sessionKeysToRemove.length + ' sessionStorage items');
+      
+      // Reload the page
+      window.location.reload();
+    }
+
+    // Expose functions to window for button onclick handlers
+    window.performSSOAuth = performSSOAuth;
+    window.clearAuthentication = clearAuthentication;
+    window.showCurrentToken = showCurrentToken;
+    window.forceFullReset = forceFullReset;
+    window.switchMode = switchMode;
+
+    // Pre-fill form with defaults from sso-config.js and config.js
+    function loadDefaultsFromConfig() {
+      // Use sso-config.js serverAddress, fallback to config.js basicConf
+      const serverAddress = window.ssoConfig.serverAddress && 
+                           window.ssoConfig.serverAddress !== 'https://your-server.acrolinx-cloud.net'
+        ? window.ssoConfig.serverAddress
+        : (window.basicConf && window.basicConf.serverAddress) || '';
+      
+      const username = window.ssoConfig.username || '';
+      
+      if (serverAddress) {
+        document.getElementById('ssoServer').value = serverAddress;
+        window.ssoConfig.serverAddress = serverAddress;
+      }
+      if (username) {
+        document.getElementById('ssoUsername').value = username;
+      }
+      
+      console.log('[SSO Demo] Loaded defaults from config files:', { serverAddress, username });
+      return { serverAddress, username };
+    }
+
+    // Fetch config from proxy server and pre-fill form
+    // This is used to get .env values for form pre-fill (works in both modes)
+    async function loadConfigFromProxy() {
+      try {
+        const response = await fetch(window.ssoConfig.proxyServerUrl + '/api/sso/status');
+        if (response.ok) {
+          const config = await response.json();
+          console.log('[SSO Demo] Loaded config from proxy server:', config);
+          
+          // Pre-fill form fields with proxy config
+          if (config.server) {
+            document.getElementById('ssoServer').value = config.server;
+            // Also update ssoConfig for consistency
+            window.ssoConfig.serverAddress = config.server;
+          }
+          if (config.defaultUsername) {
+            document.getElementById('ssoUsername').value = config.defaultUsername;
+            window.ssoConfig.username = config.defaultUsername;
+          }
+          if (config.clientSignature) {
+            window.ssoConfig.clientSignature = config.clientSignature;
+          }
+          
+          console.log('[SSO Demo] Form pre-filled from proxy server config');
+          return true;
+        }
+      } catch (error) {
+        console.log('[SSO Demo] Proxy server not available at', window.ssoConfig.proxyServerUrl);
+        console.log('[SSO Demo] Start proxy with: node samples/sso-proxy-server.js');
+      }
+      return false;
+    }
+
+    // Initialize on DOM ready
+    async function initPage() {
+      // First, load defaults from config files as baseline
+      const defaults = loadDefaultsFromConfig();
+      
+      // Try to get better defaults from proxy server (if running)
+      // This provides .env values for form pre-fill in BOTH modes
+      const proxyAvailable = await loadConfigFromProxy();
+      
+      if (proxyAvailable) {
+        console.log('[SSO Demo] Proxy server available - form pre-filled with .env values');
+      } else {
+        // No proxy - use config file defaults
+        if (defaults.serverAddress) {
+          console.log('[SSO Demo] Using config.js defaults (proxy not available)');
+        } else {
+          console.log('[SSO Demo] No defaults available - please enter server URL manually');
+        }
+      }
+      
+      // Set initial mode display
+      updateModeInfo(currentMode);
+      // Initialize sidebar
+      initAcrolinxStandard();
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPage);
+    } else {
+      initPage();
+    }
+  </script>
+</body>
+
+</html>

@@ -26,13 +26,11 @@
 window.basicConf = {
   sidebarContainerId: 'sidebarContainer',
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
-  //serverAddress: 'https://amazon.acrolinx.cloud',
-  serverAddress: 'https://amazon-enterprise.acrolinx.cloud',
-  //serverAddress: 'https://playspace.acrolinx-cloud.net',
+  serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
-  //clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4MTMyY2JlLTcyNzAtNmI2Ny0wMWI2LTc3MDAxNDExZDBlNyIsIm5hbWUiOiJBbWF6b24gQ2FyYm9uIERldiIsImlhdCI6MTc0NjA4NzI5OX0.zAQCeKgxguYp3qbOxKmBffOOeFJrghbBUnPsSQJ1fb3yqA6vVr_bdpXKt3VOSegv7C9zG3gtu5fRrJWMBc3jvQ; PoC v1.0.0', //DEV signature
-  clientSignature: 'eyJhbGciOiJFUzI1NiJ9.eyJpZCI6IjY4OTI0NDkyLTcyNzAtNmI2Ny0wM2ZlLTllMDAxNGEzYmU1MSIsIm5hbWUiOiJBbWF6b24gQ2FyYm9uIFNpZGViYXIiLCJpYXQiOjE3NTQ0MjE4MjZ9.tx91Ce9wxnx_j_S7uI86dXzVwRzSMA_PnlypZgmB76Vhwas-GE1TZgQsLpM0vMSzhL2aMJFlZ_-BxhZL7P9ePg; PoC v1.0.0', //Prod signature
+  // clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5; PoC v1.0.0',
+  clientSignature: 'QWNyb2xpbnhDTEk; PoC v1.0.0',
 
   /**
    * This callback can be used to set the documentReference.
@@ -53,7 +51,7 @@ window.basicConf = {
   /**
    * This optional function will be called after a successful check,
    * if Embed Check Data is enabled on the Acrolinx core server.
-   * It’s the task of the integration to save the data in a suitable place.
+   * It's the task of the integration to save the data in a suitable place.
    */
   // onEmbedCheckData: function (checkData, format) {
   //   console.log('Embed Check Data', checkData, format);
@@ -67,11 +65,13 @@ window.basicConf = {
 
   //enableSingleSignOn: true, //see: https://github.com/acrolinx/acrolinx-proxy-sample
 
- clientComponents: [
-    {
-      version: '1.5.23',
-      category: 'MAIN'
-    }]
+  // clientComponents: [
+  //   {
+  //     id: 'com.acrolinx.sidebarexample',
+  //     name: 'Acrolinx Sidebar Example Client',
+  //     version: '1.2.3.999',
+  //     category: 'MAIN'
+  //   },
   //   {
   //     id: 'com.acrolinx.somecms',
   //     name: 'My CMS',
@@ -102,8 +102,3 @@ window.basicConf = {
   //}
 
 };
-
-
-
-
-
