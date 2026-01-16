@@ -1,7 +1,6 @@
 import '../styles/index.scss';
 import { SoftwareComponent } from '@acrolinx/sidebar-interface';
-import { AcrolinxPluginConfig } from '@acrolinx/sidebar-sdk/dist/acrolinx-plugin';
-import { AcrolinxPlugin, ContentEditableAdapter } from '@acrolinx/sidebar-sdk';
+import { AcrolinxPlugin, AcrolinxPluginConfig, ContentEditableAdapter } from '@acrolinx/sidebar-sdk';
 
 (() => {
 

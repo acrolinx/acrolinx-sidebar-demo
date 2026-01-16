@@ -13,3 +13,4 @@ tmp
 .tscache
 bower_components
 .env
+.DS_Store

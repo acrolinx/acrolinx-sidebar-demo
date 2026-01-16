@@ -64,8 +64,24 @@ Before you start developing your own integration, you might benefit from looking
 To install the SDK to your npm-based Acrolinx Integration project call:
 
 ```bash
-npm install acrolinx-sidebar-sdk
+npm install @acrolinx/sidebar-sdk
 ```
+
+> **⚠️ WARNING: unpkg CDN Usage**
+>
+> Some samples in this repository load the Acrolinx Sidebar SDK directly from unpkg (e.g., `https://unpkg.com/@acrolinx/sidebar-sdk/dist/index.js`). **This approach is provided for demonstration and development purposes only and should NOT be used in production environments.**
+>
+> **Reasons to avoid unpkg in production:**
+> - Acrolinx does not own or control the unpkg.com domain
+> - We cannot guarantee availability, performance, or security of third-party CDN services
+> - There are potential risks including service outages, breaking changes, and supply chain vulnerabilities
+> - Production integrations require controlled, versioned dependencies
+>
+> **For production use:**
+> - Always install the SDK via npm/yarn as a direct dependency in your project
+> - Bundle the SDK with your application using your build tools (webpack, vite, rollup, etc.)
+> - Host all dependencies on infrastructure you control
+> - Use the [Integration Boilerplate Sample](#integration-boilerplate-sample) as a reference for proper production setup
 
 ### Integration Boilerplate Sample
 
