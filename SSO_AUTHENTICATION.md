@@ -49,6 +49,8 @@ Browser ────────────────────────
 - No backend server needed
 - **Use for:** Quick testing and development only
 
+![DEMO Mode Screenshot](doc/demo-sso-mode.png)
+
 ### PROXY Mode (Backend Server)
 
 ```
@@ -60,6 +62,8 @@ Browser ──────> Proxy Server (3002) ──────> Acrolinx Ser
 - SSO credentials stay hidden on the server
 - Requires running the proxy server on port 3002
 - **Use for:** Production-like testing and deployment
+
+![PROXY Mode Screenshot](doc/proxy-sso-mode.png)
 
 ### Why Browser Code Cannot Read `.env` Files
 
