@@ -133,13 +133,34 @@ function sanitizeForLogging(value, key = '') {
   }
   
   if (typeof value === 'string') {
+    // Try to parse as JSON first to sanitize objects within strings
+    if (value.startsWith('{') || value.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(value);
+        return JSON.stringify(sanitizeForLogging(parsed), null, 2);
+      } catch {
+        // Not valid JSON, continue with string sanitization
+      }
+    }
+    
     // Redact strings that look like they contain sensitive data
     if (SENSITIVE_PATTERNS.some((pattern) => pattern.test(value))) {
-      // Only redact if it looks like a key-value context
-      return value.replaceAll(
-        /(password|secret|token|apikey|api_key|authorization|credential)["']?\s*[:=]\s*["']?[^"'\s,}]*/gi,
+      // Handle JSON format: "key": "value" or "key": value
+      let sanitized = value.replaceAll(
+        /"(password|secret|token|apikey|api_key|authorization|credential|private)":\s*"[^"]*"/gi,
+        '"$1": "[REDACTED]"'
+      );
+      // Handle JSON format with non-string values: "key": value
+      sanitized = sanitized.replaceAll(
+        /"(password|secret|token|apikey|api_key|authorization|credential|private)":\s*[^",}\]]+/gi,
+        '"$1": "[REDACTED]"'
+      );
+      // Handle key=value or key: value format
+      sanitized = sanitized.replaceAll(
+        /(password|secret|token|apikey|api_key|authorization|credential|private)\s*[:=]\s*\S+/gi,
         '$1: [REDACTED]'
       );
+      return sanitized;
     }
     return value;
   }
@@ -161,6 +182,7 @@ function sanitizeForLogging(value, key = '') {
 
 /**
  * Sanitize all arguments before logging.
+ * Handles both objects and pre-stringified JSON.
  * 
  * @param {Array} args - Arguments to sanitize
  * @returns {Array} Sanitized arguments safe for logging
@@ -168,8 +190,10 @@ function sanitizeForLogging(value, key = '') {
 function sanitizeArgs(args) {
   return args.map((arg) => {
     if (typeof arg === 'object' && arg !== null) {
+      // Sanitize the object, then stringify
       return JSON.stringify(sanitizeForLogging(arg), null, 2);
     }
+    // For strings (including pre-stringified JSON), sanitize directly
     return sanitizeForLogging(arg);
   });
 }
@@ -341,7 +365,8 @@ async function handleAuth(req, res) {
   logger.info('SSO Auth request received');
   logger.debug('Request method:', req.method);
   logger.debug('Request URL:', req.url);
-  logger.debug('Request headers:', JSON.stringify(req.headers, null, 2));
+  // Note: Headers are sanitized by the logger to prevent logging sensitive data
+  logger.debug('Request headers:', req.headers);
   
   // Parse request body if any
   let requestBody = '';
@@ -392,21 +417,22 @@ async function handleAuth(req, res) {
       const safeHeaders = { ...options.headers };
       delete safeHeaders.password;
       safeHeaders['[REDACTED]'] = 'credentials removed from log';
-      logger.debug('Request options:', JSON.stringify({ ...options, headers: safeHeaders }, null, 2));
+      // Note: Options are sanitized by the logger, but we also use safeHeaders for extra safety
+      logger.debug('Request options:', { ...options, headers: safeHeaders });
       
       const response = await makeRequest(options, '');
       
       logger.debug('Response status:', response.statusCode);
-      logger.debug('Response headers:', JSON.stringify(response.headers, null, 2));
+      logger.debug('Response headers:', response.headers);
       
       if (response.statusCode === 200 || response.statusCode === 201) {
         logger.success(`Authentication successful for user: ${username}`);
-        logger.debug('Response data:', JSON.stringify(response.data, null, 2));
+        logger.debug('Response data:', response.data);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(response.data));
       } else {
         logger.error(`Authentication failed: ${response.statusCode}`);
-        logger.debug('Error response:', JSON.stringify(response.data, null, 2));
+        logger.debug('Error response:', response.data);
         res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ 
           error: 'Authentication failed',
