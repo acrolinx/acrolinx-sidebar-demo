@@ -98,7 +98,87 @@ const COLORS = {
 const currentLogLevel = LOG_LEVELS[process.env.LOG_LEVEL?.toUpperCase()] ?? LOG_LEVELS.INFO;
 
 /**
- * Logger utility with configurable log levels
+ * Patterns that indicate sensitive data which should be redacted from logs.
+ * This prevents clear-text logging of credentials (CodeQL security finding).
+ */
+const SENSITIVE_PATTERNS = [
+  /password/i,
+  /secret/i,
+  /token/i,
+  /apikey/i,
+  /api_key/i,
+  /authorization/i,
+  /credential/i,
+  /private/i
+];
+
+/**
+ * Sanitize a value to prevent logging sensitive data.
+ * Redacts values that appear to be sensitive based on key names or patterns.
+ * 
+ * @param {*} value - Value to sanitize
+ * @param {string} [key] - Optional key name for context-aware redaction
+ * @returns {*} Sanitized value safe for logging
+ */
+function sanitizeForLogging(value, key = '') {
+  // Check if the key name suggests sensitive data
+  const keyIsSensitive = SENSITIVE_PATTERNS.some((pattern) => pattern.test(key));
+  if (keyIsSensitive && value) {
+    return '[REDACTED]';
+  }
+  
+  // Handle different types
+  if (value === null || value === undefined) {
+    return value;
+  }
+  
+  if (typeof value === 'string') {
+    // Redact strings that look like they contain sensitive data
+    if (SENSITIVE_PATTERNS.some((pattern) => pattern.test(value))) {
+      // Only redact if it looks like a key-value context
+      return value.replaceAll(
+        /(password|secret|token|apikey|api_key|authorization|credential)["']?\s*[:=]\s*["']?[^"'\s,}]*/gi,
+        '$1: [REDACTED]'
+      );
+    }
+    return value;
+  }
+  
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeForLogging(item));
+  }
+  
+  if (typeof value === 'object') {
+    const sanitized = {};
+    for (const objKey of Object.keys(value)) {
+      sanitized[objKey] = sanitizeForLogging(value[objKey], objKey);
+    }
+    return sanitized;
+  }
+  
+  return value;
+}
+
+/**
+ * Sanitize all arguments before logging.
+ * 
+ * @param {Array} args - Arguments to sanitize
+ * @returns {Array} Sanitized arguments safe for logging
+ */
+function sanitizeArgs(args) {
+  return args.map((arg) => {
+    if (typeof arg === 'object' && arg !== null) {
+      return JSON.stringify(sanitizeForLogging(arg), null, 2);
+    }
+    return sanitizeForLogging(arg);
+  });
+}
+
+/**
+ * Logger utility with configurable log levels.
+ * 
+ * Security: All log methods sanitize input to prevent clear-text logging
+ * of sensitive information like passwords, tokens, and secrets.
  */
 const logger = {
   /**
@@ -116,14 +196,17 @@ const logger = {
   },
 
   /**
-   * Format and output a log message
+   * Format and output a log message with sanitized arguments.
+   * Sensitive data is automatically redacted before logging.
    */
   _log(level, color, ...args) {
     if (!this._shouldLog(level)) return;
     
     const timestamp = `${COLORS.dim}[${this._timestamp()}]${COLORS.reset}`;
     const levelTag = `${color}[${level}]${COLORS.reset}`;
-    console.log(timestamp, levelTag, ...args);
+    const safeArgs = sanitizeArgs(args);
+    // eslint-disable-next-line no-console
+    console.log(timestamp, levelTag, ...safeArgs);
   },
 
   /**
@@ -161,14 +244,19 @@ const logger = {
     if (!this._shouldLog('INFO')) return;
     const timestamp = `${COLORS.dim}[${this._timestamp()}]${COLORS.reset}`;
     const levelTag = `${COLORS.green}[SUCCESS]${COLORS.reset}`;
-    console.log(timestamp, levelTag, ...args);
+    const safeArgs = sanitizeArgs(args);
+    // eslint-disable-next-line no-console
+    console.log(timestamp, levelTag, ...safeArgs);
   },
 
   /**
    * Raw output without formatting (for banners, etc.)
+   * Note: Only use for static/safe content like startup banners.
    */
   raw(...args) {
-    console.log(...args);
+    const safeArgs = sanitizeArgs(args);
+    // eslint-disable-next-line no-console
+    console.log(...safeArgs);
   }
 };
 
