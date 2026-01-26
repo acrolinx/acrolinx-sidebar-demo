@@ -337,21 +337,42 @@ async function handleAuth(req, res) {
 
 /**
  * Handle CORS preflight requests
+ * 
+ * Security: Uses validated origin from trusted allowlist config, not raw user input.
+ * This prevents CORS injection attacks (SonarQube jssecurity:S8348).
+ * 
  * @param {http.IncomingMessage} req - Incoming request
  * @param {http.ServerResponse} res - Server response
  */
 function handleCors(req, res) {
-  const origin = req.headers.origin;
+  const requestOrigin = req.headers.origin;
   
-  logger.debug('CORS check - Origin:', origin);
+  logger.debug('CORS check - Origin:', requestOrigin);
   logger.debug('CORS check - Allowed origins:', config.allowedOrigins);
   
-  // Check if origin is allowed
-  if (config.allowedOrigins.includes(origin) || config.allowedOrigins.includes('*')) {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
-    logger.debug('CORS allowed for origin:', origin);
-  } else if (origin) {
-    logger.warn('CORS blocked for origin:', origin);
+  // Find matching origin from trusted allowlist (not user input)
+  // This ensures we only use validated values in the CORS header
+  let corsOriginHeader = null;
+  
+  if (config.allowedOrigins.includes('*')) {
+    // Wildcard configured - allow all origins
+    corsOriginHeader = '*';
+  } else {
+    // Find exact match in trusted allowlist and use that value
+    const matchedOrigin = config.allowedOrigins.find(
+      (allowedOrigin) => allowedOrigin === requestOrigin
+    );
+    if (matchedOrigin) {
+      // Use the trusted value from config array, not the user input
+      corsOriginHeader = matchedOrigin;
+    }
+  }
+  
+  if (corsOriginHeader !== null) {
+    res.setHeader('Access-Control-Allow-Origin', corsOriginHeader);
+    logger.debug('CORS allowed for origin:', corsOriginHeader);
+  } else if (requestOrigin) {
+    logger.warn('CORS blocked for origin:', requestOrigin);
   }
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -385,10 +406,13 @@ const server = http.createServer(async (req, res) => {
     // Health check and config endpoint (returns non-sensitive config for client pre-fill)
     logger.debug('Status/config request');
     
-    // Add CORS headers for browser access
-    const origin = req.headers.origin;
-    if (origin && config.allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
+    // Add CORS headers for browser access using validated origin from allowlist
+    const requestOrigin = req.headers.origin;
+    const validatedOrigin = config.allowedOrigins.find(
+      (allowed) => allowed === requestOrigin
+    );
+    if (validatedOrigin) {
+      res.setHeader('Access-Control-Allow-Origin', validatedOrigin);
     }
     
     res.writeHead(200, { 'Content-Type': 'application/json' });
