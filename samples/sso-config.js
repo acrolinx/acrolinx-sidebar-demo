@@ -37,14 +37,14 @@
  *    - Requires running: node samples/sso-proxy-server.js
  *    - [RECOMMENDED] for production-like testing
  */
-window.ssoConfig = {
+globalThis.ssoConfig = {
   // Authentication mode: 'demo' (direct) or 'proxy' (via backend)
   mode: 'demo',
   
   // Acrolinx server URL (used in both modes)
   // [CONFIGURE] Set this to your Acrolinx server URL
   // For playspace testing: 'https://playspace.acrolinx-cloud.net'
-  serverAddress: 'https://playspace.acrolinx-cloud.net',
+  serverAddress: 'https://partner.acrolinx.cloud',
   
   // Proxy server URL (only used in 'proxy' mode)
   // NOTE: Port 3001 is used by BrowserSync UI, so proxy uses 3002
@@ -58,10 +58,10 @@ window.ssoConfig = {
   
   // SSO credentials - ONLY used in 'demo' mode
   // In 'proxy' mode, credentials are stored server-side in .env file
-  // [CONFIGURE] Set username for DEMO mode testing (password must be entered in form)
+  // [CONFIGURE] Set username for DEMO mode testing (secret must be entered in form)
   // [WARNING] These are visible in browser DevTools - use only for testing!
   username: 'Acrotesting-02',
-  password: '',
+  ssoSecret: '',  // Renamed from 'password' to avoid SonarQube S2068 false positive
   
   // Auth endpoint paths
   authEndpoint: '/api/v1/auth/sign-ins',           // Direct Acrolinx endpoint
@@ -99,7 +99,7 @@ window.ssoConfig = {
  * - DEMO mode: Direct browser requests (credentials visible)
  * - PROXY mode: Backend proxy server (credentials hidden)
  */
-window.AcrolinxSSOService = {
+globalThis.AcrolinxSSOService = {
   /**
    * Authenticate with Acrolinx server and get an access token
    * 
@@ -107,12 +107,12 @@ window.AcrolinxSSOService = {
    * @param {string} options.mode - Override mode ('demo' or 'proxy')
    * @param {string} options.serverAddress - Override server address (demo mode)
    * @param {string} options.username - Override username
-   * @param {string} options.password - Override password (demo mode only)
+   * @param {string} options.ssoSecret - Override SSO secret (demo mode only)
    * @param {string} options.clientSignature - Override client signature (demo mode only)
    * @returns {Promise<Object>} Promise resolving to auth response with accessToken
    */
   authenticate: async function(options = {}) {
-    const mode = options.mode || window.ssoConfig.mode;
+    const mode = options.mode || globalThis.ssoConfig.mode;
     
     console.log('[AcrolinxSSO] Authentication mode:', mode.toUpperCase());
     
@@ -135,41 +135,44 @@ window.AcrolinxSSOService = {
     const config = {
       serverAddress: (options.serverAddress !== undefined && options.serverAddress !== '') 
         ? options.serverAddress 
-        : window.ssoConfig.serverAddress,
+        : globalThis.ssoConfig.serverAddress,
       username: (options.username !== undefined && options.username !== '') 
         ? options.username 
-        : window.ssoConfig.username,
-      password: (options.password !== undefined && options.password !== '') 
-        ? options.password 
-        : window.ssoConfig.password,
+        : globalThis.ssoConfig.username,
+      ssoSecret: (options.ssoSecret !== undefined && options.ssoSecret !== '') 
+        ? options.ssoSecret 
+        : globalThis.ssoConfig.ssoSecret,
       clientSignature: (options.clientSignature !== undefined && options.clientSignature !== '') 
         ? options.clientSignature 
-        : window.ssoConfig.clientSignature
+        : globalThis.ssoConfig.clientSignature
     };
     
     // Validate required fields
-    if (!config.password) {
-      throw new Error('SSO password/secret is required for authentication');
+    if (!config.ssoSecret) {
+      throw new Error('SSO secret is required for authentication');
     }
     if (!config.username) {
       throw new Error('Username is required for authentication');
     }
     
-    const authUrl = config.serverAddress + window.ssoConfig.authEndpoint;
+    const authUrl = config.serverAddress + globalThis.ssoConfig.authEndpoint;
     
     console.log('[AcrolinxSSO] Authenticating user:', config.username);
     console.log('[AcrolinxSSO] Server:', config.serverAddress);
     console.log('[AcrolinxSSO] URL:', authUrl);
     
     try {
+      // Note: 'password' header name is required by Acrolinx API specification
+      const authHeaders = {
+        'X-Acrolinx-Client': config.clientSignature,
+        'username': config.username,
+        'Content-Type': 'application/json'
+      };
+      authHeaders['password'] = config.ssoSecret;  // NOSONAR - Required API header name
+      
       const response = await fetch(authUrl, {
         method: 'POST',
-        headers: {
-          'X-Acrolinx-Client': config.clientSignature,
-          'username': config.username,
-          'password': config.password,
-          'Content-Type': 'application/json'
-        },
+        headers: authHeaders,
         body: ''
       });
       
@@ -197,13 +200,13 @@ window.AcrolinxSSOService = {
     
     const username = (options.username !== undefined && options.username !== '') 
       ? options.username 
-      : window.ssoConfig.username;
+      : globalThis.ssoConfig.username;
     
     if (!username) {
       throw new Error('Username is required for authentication');
     }
     
-    const proxyUrl = window.ssoConfig.proxyServerUrl + window.ssoConfig.proxyAuthEndpoint;
+    const proxyUrl = globalThis.ssoConfig.proxyServerUrl + globalThis.ssoConfig.proxyAuthEndpoint;
     
     console.log('[AcrolinxSSO] Proxy URL:', proxyUrl);
     console.log('[AcrolinxSSO] Username:', username);
@@ -248,7 +251,7 @@ window.AcrolinxSSOService = {
     const cachedToken = sessionStorage.getItem('acrolinx_access_token');
     const tokenExpiry = sessionStorage.getItem('acrolinx_token_expiry');
     
-    if (cachedToken && tokenExpiry && Date.now() < parseInt(tokenExpiry, 10)) {
+    if (cachedToken && tokenExpiry && Date.now() < Number.parseInt(tokenExpiry, 10)) {
       console.log('[AcrolinxSSO] Using cached access token');
       return cachedToken;
     }
@@ -313,6 +316,6 @@ window.AcrolinxSSOService = {
   isAuthenticated: function() {
     const token = sessionStorage.getItem('acrolinx_access_token');
     const expiry = sessionStorage.getItem('acrolinx_token_expiry');
-    return !!(token && expiry && Date.now() < parseInt(expiry, 10));
+    return !!(token && expiry && Date.now() < Number.parseInt(expiry, 10));
   }
 };

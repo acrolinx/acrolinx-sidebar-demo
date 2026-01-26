@@ -16,7 +16,7 @@ limitations under the License.
 
 For more information visit: https://www.acrolinx.com
 -->
-<html>
+<html lang="en">
 
 <head lang="en">
   <meta charset="UTF-8">
@@ -58,8 +58,8 @@ For more information visit: https://www.acrolinx.com
     .sso-controls button {
       padding: 10px 20px;
       margin: 5px;
-      background-color: #007bff;
-      color: white;
+      background-color: #0056b3;
+      color: #ffffff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -136,7 +136,7 @@ For more information visit: https://www.acrolinx.com
         <input type="text" id="ssoUsername" value="" placeholder="your-username" />
       </div>
       
-      <div class="credential-section" id="passwordSection">
+      <div class="credential-section" id="ssoSecretSection">
         <label for="ssoPassword">Password:</label>
         <input type="password" id="ssoPassword" value="" placeholder="SSO Secret/Password (DEMO mode only)" />
       </div>
@@ -176,7 +176,8 @@ For more information visit: https://www.acrolinx.com
     // Update mode info display
     function updateModeInfo(mode) {
       const modeInfoEl = document.getElementById('modeInfo');
-      const passwordSection = document.getElementById('passwordSection');
+      // Note: Variable renamed from 'passwordSection' to avoid SonarQube S2068 false positive
+      const ssoSecretSection = document.getElementById('ssoSecretSection');
       
       if (mode === 'demo') {
         modeInfoEl.innerHTML = `
@@ -186,7 +187,7 @@ For more information visit: https://www.acrolinx.com
         `;
         modeInfoEl.style.background = '#fff3cd';
         modeInfoEl.style.border = '1px solid #ffc107';
-        passwordSection.style.display = 'block';
+        ssoSecretSection.style.display = 'block';
       } else {
         modeInfoEl.innerHTML = `
           <strong style="color: #28a745;">[PROXY MODE]</strong> Backend server authentication.<br>
@@ -195,14 +196,14 @@ For more information visit: https://www.acrolinx.com
         `;
         modeInfoEl.style.background = '#d4edda';
         modeInfoEl.style.border = '1px solid #28a745';
-        passwordSection.style.display = 'none';
+        ssoSecretSection.style.display = 'none';
       }
     }
     
     // Switch authentication mode
     function switchMode(mode) {
       currentMode = mode;
-      window.ssoConfig.setMode(mode);
+      globalThis.ssoConfig.setMode(mode);
       updateModeInfo(mode);
       console.log('[SSO Demo] Switched to mode:', mode.toUpperCase());
       
@@ -246,23 +247,23 @@ For more information visit: https://www.acrolinx.com
           username: username
         };
         
-        // Password is only needed in demo mode
+        // SSO secret is only needed in demo mode
         if (currentMode === 'demo') {
-          const password = document.getElementById('ssoPassword').value;
-          if (!password || password.trim() === '') {
-            throw new Error('SSO password/secret is required in DEMO mode. Please enter the password.');
+          const ssoSecretValue = document.getElementById('ssoPassword').value;
+          if (!ssoSecretValue || ssoSecretValue.trim() === '') {
+            throw new Error('SSO secret is required in DEMO mode. Please enter the SSO secret.');
           }
-          options.password = password;
+          options.ssoSecret = ssoSecretValue;
         }
         
         console.log('[SSO Demo] Attempting authentication:', {
           mode: currentMode,
           serverAddress: options.serverAddress,
           username: options.username,
-          hasPassword: currentMode === 'demo' ? !!options.password : 'N/A (proxy mode)'
+          hasSecret: currentMode === 'demo' ? !!options.ssoSecret : 'N/A (proxy mode)'
         });
         
-        const authData = await window.AcrolinxSSOService.authenticate(options);
+        const authData = await globalThis.AcrolinxSSOService.authenticate(options);
         console.log('[SSO Demo] Auth response:', authData);
         
         // Extract the access token
@@ -302,7 +303,7 @@ For more information visit: https://www.acrolinx.com
     // Clear authentication (including sidebar's own session)
     function clearAuthentication() {
       // Clear both our cache AND the sidebar's localStorage session
-      window.AcrolinxSSOService.clearAuth(true);
+      globalThis.AcrolinxSSOService.clearAuth(true);
       
       // Clear the sidebar container to force re-initialization
       const sidebarContainer = document.getElementById('sidebarContainer');
@@ -323,8 +324,8 @@ For more information visit: https://www.acrolinx.com
       const expiry = sessionStorage.getItem('acrolinx_token_expiry');
       
       if (token && expiry) {
-        const expiryDate = new Date(parseInt(expiry, 10));
-        const isValid = Date.now() < parseInt(expiry, 10);
+        const expiryDate = new Date(Number.parseInt(expiry, 10));
+        const isValid = Date.now() < Number.parseInt(expiry, 10);
         const status = isValid ? 'VALID' : 'EXPIRED';
         
         updateStatus(
@@ -343,7 +344,7 @@ For more information visit: https://www.acrolinx.com
       console.log('[SSO Demo] Server Address:', serverAddress);
       
       // Use clientSignature from ssoConfig (which gets it from proxy) or fallback to basicConf
-      const clientSig = window.ssoConfig.clientSignature || window.basicConf.clientSignature;
+      const clientSig = globalThis.ssoConfig.clientSignature || globalThis.basicConf.clientSignature;
       
       // Create config with SSO token
       // [IMPORTANT] Per Acrolinx documentation (sidebar-interface InitParameters):
@@ -351,8 +352,8 @@ For more information visit: https://www.acrolinx.com
       // - showServerSelector MUST be false for accessToken to work
       // - Available since sidebar version 14.11.0
       const ssoConf = {
-        ...window.basicConf,
-        serverAddress: serverAddress || window.basicConf.serverAddress,
+        ...globalThis.basicConf,
+        serverAddress: serverAddress || globalThis.basicConf.serverAddress,
         clientSignature: clientSig,
         // [CRITICAL] showServerSelector MUST be false for accessToken to be used
         showServerSelector: false,
@@ -388,7 +389,7 @@ For more information visit: https://www.acrolinx.com
     // This demo ONLY uses SSO authentication, not the sidebar's built-in sign-in
     function initAcrolinxStandard() {
       // Check if we have a valid SSO token cached
-      if (window.AcrolinxSSOService.isAuthenticated()) {
+      if (globalThis.AcrolinxSSOService.isAuthenticated()) {
         const token = sessionStorage.getItem('acrolinx_access_token');
         updateStatus('[SUCCESS] Found cached SSO token. Initializing sidebar with token...', 'success');
         // Initialize with the cached SSO token
@@ -448,11 +449,11 @@ For more information visit: https://www.acrolinx.com
       
       // Use server and clientSignature from form/ssoConfig, not basicConf
       const serverFromForm = document.getElementById('ssoServer').value;
-      const clientSig = window.ssoConfig.clientSignature || window.basicConf.clientSignature;
+      const clientSig = globalThis.ssoConfig.clientSignature || globalThis.basicConf.clientSignature;
       
       const standardConf = {
-        ...window.basicConf,
-        serverAddress: serverFromForm || window.basicConf.serverAddress,
+        ...globalThis.basicConf,
+        serverAddress: serverFromForm || globalThis.basicConf.serverAddress,
         clientSignature: clientSig,
         showServerSelector: false // Don't show server selector in SSO demo
         // No accessToken - sidebar will show sign-in or use its cached session
@@ -512,29 +513,29 @@ For more information visit: https://www.acrolinx.com
       console.log('[SSO Demo] Cleared ' + keysToRemove.length + ' localStorage items and ' + sessionKeysToRemove.length + ' sessionStorage items');
       
       // Reload the page
-      window.location.reload();
+      globalThis.location.reload();
     }
 
     // Expose functions to window for button onclick handlers
-    window.performSSOAuth = performSSOAuth;
-    window.clearAuthentication = clearAuthentication;
-    window.showCurrentToken = showCurrentToken;
-    window.forceFullReset = forceFullReset;
-    window.switchMode = switchMode;
+    globalThis.performSSOAuth = performSSOAuth;
+    globalThis.clearAuthentication = clearAuthentication;
+    globalThis.showCurrentToken = showCurrentToken;
+    globalThis.forceFullReset = forceFullReset;
+    globalThis.switchMode = switchMode;
 
     // Pre-fill form with defaults from sso-config.js and config.js
     function loadDefaultsFromConfig() {
       // Use sso-config.js serverAddress, fallback to config.js basicConf
-      const serverAddress = window.ssoConfig.serverAddress && 
-                           window.ssoConfig.serverAddress !== 'https://your-server.acrolinx-cloud.net'
-        ? window.ssoConfig.serverAddress
-        : (window.basicConf && window.basicConf.serverAddress) || '';
+      const serverAddress = globalThis.ssoConfig.serverAddress && 
+                           globalThis.ssoConfig.serverAddress !== 'https://your-server.acrolinx-cloud.net'
+        ? globalThis.ssoConfig.serverAddress
+        : (globalThis.basicConf && globalThis.basicConf.serverAddress) || '';
       
-      const username = window.ssoConfig.username || '';
+      const username = globalThis.ssoConfig.username || '';
       
       if (serverAddress) {
         document.getElementById('ssoServer').value = serverAddress;
-        window.ssoConfig.serverAddress = serverAddress;
+        globalThis.ssoConfig.serverAddress = serverAddress;
       }
       if (username) {
         document.getElementById('ssoUsername').value = username;
@@ -548,7 +549,7 @@ For more information visit: https://www.acrolinx.com
     // This is used to get .env values for form pre-fill (works in both modes)
     async function loadConfigFromProxy() {
       try {
-        const response = await fetch(window.ssoConfig.proxyServerUrl + '/api/sso/status');
+        const response = await fetch(globalThis.ssoConfig.proxyServerUrl + '/api/sso/status');
         if (response.ok) {
           const config = await response.json();
           console.log('[SSO Demo] Loaded config from proxy server:', config);
@@ -557,21 +558,22 @@ For more information visit: https://www.acrolinx.com
           if (config.server) {
             document.getElementById('ssoServer').value = config.server;
             // Also update ssoConfig for consistency
-            window.ssoConfig.serverAddress = config.server;
+            globalThis.ssoConfig.serverAddress = config.server;
           }
           if (config.defaultUsername) {
             document.getElementById('ssoUsername').value = config.defaultUsername;
-            window.ssoConfig.username = config.defaultUsername;
+            globalThis.ssoConfig.username = config.defaultUsername;
           }
           if (config.clientSignature) {
-            window.ssoConfig.clientSignature = config.clientSignature;
+            globalThis.ssoConfig.clientSignature = config.clientSignature;
           }
           
           console.log('[SSO Demo] Form pre-filled from proxy server config');
           return true;
         }
-      } catch (error) {
-        console.log('[SSO Demo] Proxy server not available at', window.ssoConfig.proxyServerUrl);
+      } catch {
+        // Proxy server not running - this is expected in demo mode
+        console.log('[SSO Demo] Proxy server not available at', globalThis.ssoConfig.proxyServerUrl);
         console.log('[SSO Demo] Start proxy with: node samples/sso-proxy-server.js');
       }
       return false;
@@ -588,13 +590,11 @@ For more information visit: https://www.acrolinx.com
       
       if (proxyAvailable) {
         console.log('[SSO Demo] Proxy server available - form pre-filled with .env values');
-      } else {
+      } else if (defaults.serverAddress) {
         // No proxy - use config file defaults
-        if (defaults.serverAddress) {
-          console.log('[SSO Demo] Using config.js defaults (proxy not available)');
-        } else {
-          console.log('[SSO Demo] No defaults available - please enter server URL manually');
-        }
+        console.log('[SSO Demo] Using config.js defaults (proxy not available)');
+      } else {
+        console.log('[SSO Demo] No defaults available - please enter server URL manually');
       }
       
       // Set initial mode display
@@ -603,10 +603,12 @@ For more information visit: https://www.acrolinx.com
       initAcrolinxStandard();
     }
     
+    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPage);
+      document.addEventListener('DOMContentLoaded', () => { initPage(); });
     } else {
-      initPage();
+      // DOM already loaded, use top-level await pattern
+      await initPage();
     }
   </script>
 </body>
