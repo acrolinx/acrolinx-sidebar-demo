@@ -32,7 +32,7 @@
     "sass-embedded": "^1.97.3",
     "sass-loader": "^16.0.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.1",
+    "typescript-eslint": "^8.54.0",
     "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1",
     "webpack-merge": "^6.0.1"
