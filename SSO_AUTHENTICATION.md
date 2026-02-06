@@ -12,7 +12,7 @@ The SSO authentication flow works as follows:
 
 ---
 
-> ### ⚠️ Critical Requirement - Don't Skip This!
+> ### [CRITICAL] Don't Skip This!
 > 
 > When initializing the Acrolinx Sidebar with an SSO token, you **MUST** set:
 > 
@@ -24,6 +24,165 @@ The SSO authentication flow works as follows:
 > will show the sign-in screen instead. This is the most common SSO implementation mistake.
 > 
 > See [Initialize Sidebar with Token](#initialize-sidebar-with-token) for details.
+
+---
+
+## Understanding Proxy Architectures
+
+There are **two fundamentally different** ways to implement SSO authentication with proxies. Understanding this distinction is crucial for a successful implementation.
+
+### Architecture Option 1: SSO-Only Proxy (Recommended)
+
+This is the architecture used by this demo and is the **recommended approach**.
+
+```
+┌─────────────────┐     SSO Auth Only      ┌─────────────────┐
+│                 │ ─────────────────────► │                 │
+│  Browser/       │                        │  SSO Proxy      │
+│  Sidebar        │ ◄───────────────────── │  (localhost:    │
+│                 │     Access Token       │   3002)         │
+└────────┬────────┘                        └────────┬────────┘
+         │                                          │
+         │  All Check API calls                     │ Auth only
+         │  go DIRECT to Acrolinx                   ▼
+         │                                 ┌─────────────────┐
+         └────────────────────────────────►│                 │
+                                           │  Acrolinx       │
+                                           │  Platform       │
+                                           │                 │
+                                           └─────────────────┘
+```
+
+**How it works:**
+- The proxy server handles ONLY the SSO authentication (getting the access token)
+- Once authenticated, the Sidebar communicates **directly** with the Acrolinx Platform for all other operations (checks, results, etc.)
+- This is simpler and less error-prone
+
+**Advantages:**
+- Minimal proxy complexity
+- No risk of breaking Acrolinx API responses
+- Better performance (direct communication)
+- Easier to maintain
+
+### Architecture Option 2: Full API Proxy
+
+Some organizations require ALL traffic to go through their proxy for security/compliance reasons.
+
+```
+┌─────────────────┐    ALL API calls       ┌─────────────────┐
+│                 │ ─────────────────────► │                 │
+│  Browser/       │                        │  Customer's     │
+│  Sidebar        │ ◄───────────────────── │  Proxy Server   │
+│                 │                        │  (port 8080)    │
+└─────────────────┘                        └────────┬────────┘
+                                                    │
+                                                    │ Forwards to
+                                                    ▼
+                                           ┌─────────────────┐
+                                           │                 │
+                                           │  Acrolinx       │
+                                           │  Platform       │
+                                           │                 │
+                                           └─────────────────┘
+```
+
+**[WARNING] If you choose this approach, read the [Full API Proxy Requirements](#full-api-proxy-requirements) section carefully!**
+
+### Architecture Comparison
+
+| Aspect | SSO-Only Proxy | Full API Proxy |
+|--------|----------------|----------------|
+| SSO Authentication | Proxied | Proxied |
+| Sidebar Loading | Direct from Acrolinx | Direct from Acrolinx |
+| Check API Calls | **Direct to Acrolinx** | **Proxied through backend** |
+| Config/Broadcast calls | Direct | Proxied |
+| Complexity | Low | High |
+| Risk of Breaking | Low | **High** |
+
+---
+
+## Full API Proxy Requirements
+
+**[IMPORTANT]** If you are implementing a full API proxy (proxying ALL Acrolinx API calls), you **MUST** follow these requirements carefully. Failure to do so will result in checks failing with "reconnecting" messages.
+
+### Understanding the Check Flow
+
+The Acrolinx check process follows this flow:
+
+```
+1. POST /api/v1/checking/checks
+   → Returns: { "data": { "id": "xxx" }, "links": { "result": "...", "cancel": "..." } }
+
+2. GET /api/v1/checking/checks/{id}  (polling)
+   → Returns: { "data": { "progress": { "percent": 50 }, "state": "checking" } }
+   → Repeat until state === "done"
+
+3. GET /api/v1/checking/checks/{id}  (final poll)
+   → Returns: { "data": { "progress": { "percent": 100 }, "state": "done" }, "links": { "result": "..." } }
+
+4. GET {result-link}
+   → Returns: Full check results with score, issues, etc.
+```
+
+**If any step fails or returns malformed data, the sidebar shows "reconnecting" and fails silently.**
+
+### Critical Proxy Requirements
+
+| Requirement | Description | What Happens If Missing |
+|-------------|-------------|------------------------|
+| **Forward ALL Response Headers** | Pass through ALL headers from Acrolinx, especially `Link`, `Content-Type`, and custom Acrolinx headers | Sidebar cannot fetch results |
+| **Preserve Response Body** | Do NOT modify, transform, or truncate the JSON response | Sidebar gets malformed data and fails |
+| **Sufficient Timeouts** | Proxy timeout must exceed check completion time (checks can take 10-30+ seconds for large documents) | Check times out before results arrive |
+| **Support Streaming** | Must support chunked/streaming responses | Large result payloads fail |
+| **Proper CORS Headers** | Must return correct CORS headers for ALL responses | Browser blocks responses |
+| **No Size Limits** | Do not impose response body size limits | Large check results get truncated |
+
+### Headers That MUST Be Forwarded
+
+```
+Content-Type: application/json
+Link: <url>; rel="result", <url>; rel="cancel"
+X-Acrolinx-*: (all custom Acrolinx headers)
+```
+
+### Response Body Requirements
+
+The proxy must preserve the exact JSON structure. Critical fields include:
+
+**Check Status Response:**
+```json
+{
+  "data": {
+    "id": "check-id",
+    "progress": {
+      "percent": 100,
+      "message": "Done"
+    },
+    "state": "done"
+  },
+  "links": {
+    "result": "https://acrolinx-server/api/v1/checking/checks/{id}/result",
+    "cancel": "https://acrolinx-server/api/v1/checking/checks/{id}/cancel"
+  }
+}
+```
+
+**[WARNING]** If `links`, `progress`, or `state` fields are missing or malformed, the sidebar will fail.
+
+### Timeout Configuration
+
+| Operation | Recommended Timeout |
+|-----------|-------------------|
+| SSO Authentication | 30 seconds |
+| Check Submission | 30 seconds |
+| Check Polling | 60 seconds |
+| Result Fetch | 120 seconds |
+
+### WebSocket Considerations
+
+If your proxy doesn't support WebSocket connections and the sidebar is configured to use WebSockets for notifications, this can cause the "reconnecting" behavior. Ensure your proxy either:
+- Supports WebSocket passthrough, OR
+- Is configured to use HTTP polling instead
 
 ---
 
@@ -541,7 +700,7 @@ Contact your Acrolinx administrator to configure these settings.
 
 ## Troubleshooting
 
-### Common Issues
+### Common SSO Issues
 
 | Issue | Solution |
 |-------|----------|
@@ -553,6 +712,76 @@ Contact your Acrolinx administrator to configure these settings.
 | **Port 3002 already in use** | Kill existing process: `lsof -i :3002` then `kill <PID>` |
 | **Sidebar still shows "CHECK" after clearing auth** | Click "Force Full Reset" to clear sidebar's localStorage cache |
 | **Token expires quickly** | Implement token refresh logic; Check `expiresIn` value |
+
+### Full API Proxy Issues (Check Failures)
+
+If you're using a full API proxy (proxying ALL traffic, not just SSO), these issues are specific to that architecture:
+
+| Issue | Likely Cause | Solution |
+|-------|--------------|----------|
+| **Check starts but shows "reconnecting" then vanishes** | Proxy stripping response headers or modifying response body | Ensure proxy forwards ALL headers, especially `Link` and `Content-Type` |
+| **Check submits but results never display** | Proxy timeout too short | Increase proxy timeout to at least 120 seconds for result fetch |
+| **Polling works but final results fail** | Response body being truncated or transformed | Disable any response body transformation/filtering in proxy |
+| **"reconnecting" appears intermittently** | WebSocket not supported by proxy | Configure proxy for WebSocket passthrough or use HTTP polling |
+| **Large documents always fail** | Response size limits on proxy | Remove or increase response body size limits |
+
+### Debugging Full API Proxy Issues
+
+When checks fail with a full API proxy, follow these debugging steps:
+
+**Step 1: Verify the Check Flow**
+
+Monitor your proxy logs for these requests in sequence:
+
+```
+1. POST /api/v1/checking/checks           ← Check submission
+2. GET  /api/v1/checking/checks/{id}      ← Polling (multiple times)
+3. GET  /api/v1/checking/checks/{id}      ← Final poll (state: "done")
+4. GET  {result-link}                     ← Result fetch
+```
+
+**Step 2: Compare Proxy vs Direct Responses**
+
+Capture and compare the response your proxy returns vs what Acrolinx returns directly:
+
+```bash
+# Direct request to Acrolinx (bypass proxy)
+curl -H "X-Acrolinx-Auth: YOUR_TOKEN" \
+  "https://your-acrolinx-server/api/v1/checking/checks/{id}" \
+  -v > direct_response.json
+
+# Request through your proxy
+curl -H "X-Acrolinx-Auth: YOUR_TOKEN" \
+  "https://your-proxy/api/v1/checking/checks/{id}" \
+  -v > proxy_response.json
+
+# Compare
+diff direct_response.json proxy_response.json
+```
+
+**Step 3: Check Response Headers**
+
+Ensure these headers are present in proxy responses:
+
+```bash
+# Critical headers to verify:
+Content-Type: application/json
+Link: <url>; rel="result", <url>; rel="cancel"
+```
+
+**Step 4: Test Direct Connection**
+
+Temporarily bypass your proxy to confirm the issue is proxy-related:
+
+```javascript
+// In sidebar init, point directly to Acrolinx (for testing only)
+const acrolinxPlugin = new AcrolinxPlugin({
+  serverAddress: 'https://your-acrolinx-server.com',  // Direct, not proxy
+  // ...
+});
+```
+
+If checks work when bypassing the proxy, the issue is confirmed to be proxy-related.
 
 ### Debug Mode
 
@@ -568,6 +797,20 @@ This will show:
 - CORS origin checks
 - Response status and headers
 - Full response data (with passwords redacted)
+
+## Best Practices Checklist
+
+Before going to production, verify:
+
+- [ ] **SSO Secret is stored securely** (environment variable, not in code)
+- [ ] **`showServerSelector: false`** is set in sidebar initialization
+- [ ] **HTTPS is used** for all production communication
+- [ ] **CORS origins are restricted** to only trusted domains
+- [ ] **Token refresh logic** is implemented for long sessions
+- [ ] **If using full API proxy:** All response headers are forwarded
+- [ ] **If using full API proxy:** Response body is not modified
+- [ ] **If using full API proxy:** Timeouts are sufficient (120+ seconds)
+- [ ] **Error handling** is implemented for auth failures
 
 ## References
 
