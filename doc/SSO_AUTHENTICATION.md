@@ -88,6 +88,8 @@ Some organizations require ALL traffic to go through their proxy for security/co
 
 **[WARNING] If you choose this approach, read the [Full API Proxy Requirements](#full-api-proxy-requirements) section carefully!**
 
+**[CASE STUDY]** See [Full API Proxy Troubleshooting Case Study](FULL_API_PROXY_CASE_STUDY.md) for a real-world example of common issues encountered with this architecture and how to diagnose them.
+
 ### Architecture Comparison
 
 | Aspect | SSO-Only Proxy | Full API Proxy |

@@ -383,7 +383,7 @@ if (missingEnvVars.length > 0) {
   console.error('\x1b[31m[ERROR] Missing required environment variables:\x1b[0m');
   missingEnvVars.forEach(varName => console.error(`  - ${varName}`));
   console.error('\nCreate a .env file based on .env.example or set these variables in your environment.');
-  console.error('See SSO_AUTHENTICATION.md for setup instructions.\n');
+  console.error('See doc/SSO_AUTHENTICATION.md for setup instructions.\n');
   process.exit(1);
 }
 
