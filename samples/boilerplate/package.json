@@ -20,7 +20,7 @@
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^10.0.1",
     "@types/eslint__js": "^9.14.0",
-    "babel-loader": "^10.0.0",
+    "babel-loader": "^10.1.0",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.4",
     "eslint": "^10.0.2",
