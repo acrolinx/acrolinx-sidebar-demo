@@ -26,10 +26,11 @@
 window.basicConf = {
   sidebarContainerId: 'sidebarContainer',
   //See: https://acrolinx.github.io/sidebar-interface/pluginDoc/interfaces/_index_.initparameters.html
-  serverAddress: 'https://partner-dev.internal.acrolinx.sh/',
+  serverAddress: 'https://partner.acrolinx.cloud',
   //You'll get the clientSignature for your integration after a successful certification meeting.
   //See: https://support.acrolinx.com/hc/en-us/categories/10209837818770-Build-With-Acrolinx
-  clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5',
+  // clientSignature: 'SW50ZWdyYXRpb25EZXZlbG9wbWVudERlbW9Pbmx5; PoC v1.0.0',
+  clientSignature: 'QWNyb2xpbnhDTEk; PoC v1.0.0',
 
   /**
    * This callback can be used to set the documentReference.
@@ -50,7 +51,7 @@ window.basicConf = {
   /**
    * This optional function will be called after a successful check,
    * if Embed Check Data is enabled on the Acrolinx core server.
-   * It’s the task of the integration to save the data in a suitable place.
+   * It's the task of the integration to save the data in a suitable place.
    */
   // onEmbedCheckData: function (checkData, format) {
   //   console.log('Embed Check Data', checkData, format);
@@ -101,8 +102,3 @@ window.basicConf = {
   //}
 
 };
-
-
-
-
-
