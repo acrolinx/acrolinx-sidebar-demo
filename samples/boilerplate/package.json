@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@acrolinx/sidebar-sdk": "^2.0.3",
-    "@babel/runtime": "^7.28.6",
+    "@babel/runtime": "^7.29.2",
     "normalize.css": "^8.0.1"
   },
   "browserslist": "> 0.25%, not dead",
