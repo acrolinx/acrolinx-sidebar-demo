@@ -14,7 +14,7 @@
     "dotenv": "^18.0.4",
     "jest": "^30.5.2",
     "jest-junit": "^17.0.0",
-    "selenium-webdriver": "^4.49.0"
+    "selenium-webdriver": "^4.50.0"
   },
   "scripts": {
     "start": "browser-sync start --server --files \"samples/**/*\" --startPath samples --cors",
