@@ -91,6 +91,18 @@ See: [Boilerplate using Node and NPM](samples/boilerplate/README.md)
 
 See: [config.js](samples/config.js)
 
+### SSO Authentication
+
+The project includes support for SSO authentication using the reverse proxy/generic password method.
+This allows users to be automatically authenticated without clicking the "Sign In" button.
+
+See: [SSO_AUTHENTICATION.md](doc/SSO_AUTHENTICATION.md) for detailed setup instructions.
+
+Example files:
+- `samples/sso-config.js` - Client-side SSO configuration and service
+- `samples/sso-single-editor.html` - Working SSO demo
+- `samples/sso-proxy-server.js` - Backend proxy server for SSO authentication
+
 ## SDK Features
 
 The SDK provides [adapters](https://github.com/acrolinx/sidebar-sdk-js/tree/main/src/adapters) for:
