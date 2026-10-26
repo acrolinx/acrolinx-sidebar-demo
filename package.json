@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
-    "chromedriver": "^155.0.2",
+    "chromedriver": "^156.0.0",
     "dotenv": "^18.0.8",
     "jest": "^30.5.2",
     "jest-junit": "^17.0.0",
